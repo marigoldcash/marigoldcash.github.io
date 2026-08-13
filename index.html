@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marigold — digital cash in fixed notes</title>
+<meta name="description" content="Marigold is digital cash in fixed notes of 1, 10, 100 and 1,000. In development. No token sale.">
+<meta property="og:title" content="Marigold — digital cash in fixed notes">
+<meta property="og:description" content="Notes you hold, hand over, and understand. In development.">
+<meta property="og:url" content="https://marigold.cash">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23141f19'/%3E%3Ccircle cx='32' cy='32' r='17' fill='%23E4A33D'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%237A4212'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141f19;
+    --note:#18291f;
+    --note-edge:#0f1813;
+    --gold:#e4a33d;
+    --amber:#c9761f;
+    --petal:#f3cf82;
+    --cream:#efe7d3;
+    --moss:#9aa894;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    background:var(--ink);
+    color:var(--cream);
+    font-family:"Fraunces",serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:1.6rem;
+    min-height:100vh;
+    padding:2rem 1rem;
+  }
+
+  /* ---------- the note ---------- */
+  .note{
+    position:relative;
+    width:min(860px,94vw);
+    background:
+      radial-gradient(120% 160% at 50% 38%, #1d3226 0%, var(--note) 46%, var(--note-edge) 100%);
+    border:1px solid rgba(228,163,61,.55);
+    box-shadow:
+      0 0 0 4px var(--ink),
+      0 0 0 5px rgba(228,163,61,.28),
+      0 24px 60px -24px rgba(0,0,0,.8);
+    padding:2.6rem 2.8rem 2.2rem;
+    opacity:0;
+    transform:translateY(14px);
+    animation:settle .9s cubic-bezier(.2,.7,.2,1) .15s forwards;
+  }
+  @keyframes settle{to{opacity:1;transform:none}}
+
+  /* inner hairline frame */
+  .note::before{
+    content:"";
+    position:absolute;
+    inset:10px;
+    border:1px solid rgba(228,163,61,.35);
+    pointer-events:none;
+  }
+
+  /* microprint strips */
+  .micro{
+    position:absolute;
+    left:26px;right:26px;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:6px;
+    letter-spacing:.35em;
+    white-space:nowrap;
+    overflow:hidden;
+    color:rgba(228,163,61,.38);
+    text-transform:uppercase;
+    user-select:none;
+  }
+  .micro.top{top:15px}
+  .micro.bottom{bottom:15px}
+
+  /* corner denominations — the actual note denominations */
+  .corner{
+    position:absolute;
+    font-weight:600;
+    font-size:1.05rem;
+    color:var(--gold);
+    letter-spacing:.02em;
+    font-variant-numeric:tabular-nums;
+  }
+  .corner.tl{top:26px;left:32px}
+  .corner.tr{top:26px;right:32px}
+  .corner.bl{bottom:26px;left:32px}
+  .corner.br{bottom:26px;right:32px}
+
+  /* ---------- center content ---------- */
+  .face{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    gap:1.15rem;
+    padding:1.2rem 0 .9rem;
+  }
+
+  .rosette{
+    width:118px;height:118px;
+    animation:bloom 1.4s cubic-bezier(.2,.7,.25,1) .35s both;
+  }
+  @keyframes bloom{
+    from{transform:rotate(-14deg) scale(.86);opacity:0}
+    to{transform:none;opacity:1}
+  }
+
+  h1{
+    font-size:clamp(2.3rem,6vw,3.4rem);
+    font-weight:500;
+    letter-spacing:.34em;
+    text-indent:.34em; /* optically recenter spaced caps */
+    color:var(--cream);
+    text-transform:uppercase;
+  }
+
+  .tagline{
+    font-size:clamp(1.02rem,2.4vw,1.2rem);
+    font-weight:300;
+    max-width:34em;
+    line-height:1.55;
+    color:var(--moss);
+  }
+  .tagline strong{color:var(--petal);font-weight:400}
+
+  .divider{
+    width:110px;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(228,163,61,.7),transparent);
+  }
+
+  .status{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.72rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--gold);
+  }
+
+  /* serial row */
+  .serial-row{
+    display:flex;
+    justify-content:space-between;
+    padding:0 2.6rem;
+    margin-top:1.6rem;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.7rem;
+    letter-spacing:.14em;
+    color:rgba(239,231,211,.55);
+  }
+
+  /* ---------- below the note ---------- */
+  footer{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.68rem;
+    letter-spacing:.12em;
+    color:rgba(154,168,148,.75);
+    text-align:center;
+    line-height:2;
+    opacity:0;
+    animation:settle .8s ease .8s forwards;
+  }
+
+  @media (max-width:560px){
+    .note{padding:2.2rem 1.3rem 1.8rem}
+    .corner{font-size:.85rem}
+    .corner.tl{left:22px}.corner.tr{right:22px}
+    .corner.bl{left:22px}.corner.br{right:22px}
+    .serial-row{flex-direction:column;gap:.4rem;align-items:center;margin-top:1.3rem}
+    h1{letter-spacing:.22em;text-indent:.22em}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .note,.rosette,footer{animation:none;opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+  <main class="note" aria-label="Marigold specimen note">
+    <div class="micro top" aria-hidden="true">marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash</div>
+
+    <span class="corner tl" aria-hidden="true">1</span>
+    <span class="corner tr" aria-hidden="true">10</span>
+    <span class="corner bl" aria-hidden="true">100</span>
+    <span class="corner br" aria-hidden="true">1000</span>
+
+    <div class="face">
+      <svg class="rosette" viewBox="-60 -60 120 120" role="img" aria-label="Marigold flower">
+        <!-- engraved guide rings -->
+        <circle r="55" fill="none" stroke="rgba(228,163,61,.18)" stroke-width=".7"/>
+        <circle r="49" fill="none" stroke="rgba(228,163,61,.12)" stroke-width=".7"/>
+        <!-- outer petal ring -->
+        <g fill="#c9761f" stroke="#0f1813" stroke-width=".8">
+          <ellipse cx="0" cy="-38" rx="10.5" ry="17" transform="rotate(0)"/>
+          <ellipse cx="0" cy="-38" rx="10.5" ry="17" transform="rotate(30)"/>
+          <ellipse cx="0" cy="-38" rx="10.5" ry="17" transform="rotate(60)"/>
+          <ellipse cx="0" cy="-38" rx="10.5" ry="17" transform="rotate(90)"/>
+          <ellipse cx="0" cy="-38" rx="10.5" ry="17" transform="rotate(120)"/>
+          <ellipse cx="0" cy="-38" rx="10.5" ry="17" transform="rotate(150)"/>
+          <ellipse cx="0" cy="-38" rx="10.5" ry="17" transform="rotate(180)"/>
+          <ellipse cx="0" cy="-38" rx="10.5" ry="17" transform="rotate(210)"/>
+          <ellipse cx="0" cy="-38" rx="10.5" ry="17" transform="rotate(240)"/>
+          <ellipse cx="0" cy="-38" rx="10.5" ry="17" transform="rotate(270)"/>
+          <ellipse cx="0" cy="-38" rx="10.5" ry="17" transform="rotate(300)"/>
+          <ellipse cx="0" cy="-38" rx="10.5" ry="17" transform="rotate(330)"/>
+        </g>
+        <!-- middle petal ring, offset -->
+        <g fill="#e4a33d" stroke="#0f1813" stroke-width=".8">
+          <ellipse cx="0" cy="-26" rx="9" ry="14" transform="rotate(15)"/>
+          <ellipse cx="0" cy="-26" rx="9" ry="14" transform="rotate(45)"/>
+          <ellipse cx="0" cy="-26" rx="9" ry="14" transform="rotate(75)"/>
+          <ellipse cx="0" cy="-26" rx="9" ry="14" transform="rotate(105)"/>
+          <ellipse cx="0" cy="-26" rx="9" ry="14" transform="rotate(135)"/>
+          <ellipse cx="0" cy="-26" rx="9" ry="14" transform="rotate(165)"/>
+          <ellipse cx="0" cy="-26" rx="9" ry="14" transform="rotate(195)"/>
+          <ellipse cx="0" cy="-26" rx="9" ry="14" transform="rotate(225)"/>
+          <ellipse cx="0" cy="-26" rx="9" ry="14" transform="rotate(255)"/>
+          <ellipse cx="0" cy="-26" rx="9" ry="14" transform="rotate(285)"/>
+          <ellipse cx="0" cy="-26" rx="9" ry="14" transform="rotate(315)"/>
+          <ellipse cx="0" cy="-26" rx="9" ry="14" transform="rotate(345)"/>
+        </g>
+        <!-- inner petal ring -->
+        <g fill="#f3cf82" stroke="#0f1813" stroke-width=".7">
+          <ellipse cx="0" cy="-15" rx="7" ry="10.5" transform="rotate(0)"/>
+          <ellipse cx="0" cy="-15" rx="7" ry="10.5" transform="rotate(40)"/>
+          <ellipse cx="0" cy="-15" rx="7" ry="10.5" transform="rotate(80)"/>
+          <ellipse cx="0" cy="-15" rx="7" ry="10.5" transform="rotate(120)"/>
+          <ellipse cx="0" cy="-15" rx="7" ry="10.5" transform="rotate(160)"/>
+          <ellipse cx="0" cy="-15" rx="7" ry="10.5" transform="rotate(200)"/>
+          <ellipse cx="0" cy="-15" rx="7" ry="10.5" transform="rotate(240)"/>
+          <ellipse cx="0" cy="-15" rx="7" ry="10.5" transform="rotate(280)"/>
+          <ellipse cx="0" cy="-15" rx="7" ry="10.5" transform="rotate(320)"/>
+        </g>
+        <circle r="8.5" fill="#7a4212" stroke="#0f1813" stroke-width=".8"/>
+        <circle r="3" fill="#5a300c"/>
+      </svg>
+
+      <h1>Marigold</h1>
+
+      <p class="tagline">Digital cash in fixed notes of <strong>1, 10, 100</strong> and <strong>1,000</strong>.<br>
+      Notes you hold, hand over, and understand.</p>
+
+      <div class="divider" aria-hidden="true"></div>
+
+      <p class="status">In development</p>
+    </div>
+
+    <div class="serial-row" aria-hidden="true">
+      <span>Nº 000001 — specimen</span>
+      <span>marigold.cash</span>
+    </div>
+
+    <div class="micro bottom" aria-hidden="true">marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash</div>
+  </main>
+
+  <footer>
+    No token sale. No presale. Nothing to buy yet.<br>
+    When there is something real, it will be here.
+  </footer>
+
+</body>
+</html>
