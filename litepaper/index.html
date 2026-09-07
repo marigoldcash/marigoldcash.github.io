@@ -1,4 +1,12 @@
 <!doctype html>
+<!--
+  GENERATED TEXT — do not edit the words in this file, in either repository.
+
+  The words come from whitepaper/marigold-litepaper.md in the marigold-node
+  repo. Edit them there, run whitepaper/sync-litepaper.py, rebuild the PDF,
+  and copy the result here. The design — classes, plates, chips, kickers —
+  IS this file's own and is never touched by the sync; only prose is.
+-->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -140,15 +148,15 @@
 
 <hr>
 
-<h2 id="insight"><span class="kicker">the insight</span>Don't Hide the Trail — Don't Make One</h2>
+<h2 id="insight"><span class="kicker">the insight</span>Don’t Hide the Trail — Don’t Make One</h2>
 <p>Imagine you are at a market stall. You hand a five-dollar bill to the vendor. The vendor puts it in the register. Later that day, the vendor spends that same bill at the bakery. The bakery gives it as change to the next customer.</p>
-<p>Now ask: who can trace that bill back to you? Nobody. Not because the bill's journey was encrypted or hidden — the bill was in plain view every step of the way — but because the bill itself never recorded who handed it to whom. The connection between you and the vendor was never written down. It existed only in the moment of handover and then was gone.</p>
-<p>This is the difference between hiding information and never collecting it. Privacy coins hide. Marigold doesn't collect.</p>
+<p>Now ask: who can trace that bill back to you? Nobody. Not because the bill’s journey was encrypted or hidden — the bill was in plain view every step of the way — but because the bill itself never recorded who handed it to whom. The connection between you and the vendor was never written down. It existed only in the moment of handover and then was gone.</p>
+<p>This is the difference between hiding information and never collecting it. Privacy coins hide. Marigold doesn’t collect.</p>
 
 <hr>
 
 <h2 id="how"><span class="kicker">how it works</span>Notes Instead of Accounts</h2>
-<p>Most cryptocurrencies work like bank accounts. You have an address (like an account number), and transactions move value between addresses. The addresses are public, and every movement between them is recorded forever. It is an accountant's dream and a privacy nightmare.</p>
+<p>Most cryptocurrencies work like bank accounts. You have an address (like an account number), and transactions move value between addresses. The addresses are public, and every movement between them is recorded forever. It is an accountant’s dream and a privacy nightmare.</p>
 <p>Marigold works like cash. There are no accounts. Instead, the system maintains a pool of <strong>notes</strong> — think of them as digital banknotes.</p>
 <p>Each note is a simple public record:</p>
 <ul>
@@ -156,12 +164,12 @@
   <li>A <strong>value</strong> (0.01, 0.1, 1, 10, 100, 1,000, 10,000, or 100,000 MAGLD)</li>
   <li>A <strong>lock</strong> (a public key — whoever holds the matching key can spend it)</li>
 </ul>
-<p>That's it. No owner name, no address, no identity. The note does not know who holds it. It knows only that a key exists, and that whoever can unlock it can spend it.</p>
+<p>That’s it. No owner name, no address, no identity. The note does not know who holds it. It knows only that a key exists, and that whoever can unlock it can spend it.</p>
 
 <h3>Making a Payment</h3>
 <p>Paying someone is like handing over a bill, with one extra step:</p>
 <ol>
-  <li><strong>You give the recipient the key</strong> to the note (via QR code, text message, or even verbally — the same way you'd share a photo).</li>
+  <li><strong>You give the recipient the key</strong> to the note (via QR code, text message, or even verbally — the same way you’d share a photo).</li>
   <li><strong>The recipient immediately swaps the lock</strong> — they record a transaction that replaces your key with a brand-new key that only they know. This is confirmed in under a second.</li>
 </ol>
 <p>Once that swap is confirmed, the note is irrevocably theirs. You no longer hold a key that works. Settlement is done.</p>
@@ -181,7 +189,7 @@
 <p>Because a Marigold note is nothing more than a key, using one in the real world is as simple as using physical cash. Here is how:</p>
 
 <h3>Print It, Spend It</h3>
-<p>Every note in your wallet app can be displayed as a <strong>QR code</strong>. You can print that QR code on a piece of paper, fold it up, and put it in your leather wallet — right next to your credit cards and your driver's license. That piece of paper <em>is</em> the money. Hand it to someone, and they scan it, swap the lock, and the note is theirs. You no longer hold a working key. The paper in their pocket is now worthless — the value has moved.</p>
+<p>Every note in your wallet app can be displayed as a <strong>QR code</strong>. You can print that QR code on a piece of paper, fold it up, and put it in your leather wallet — right next to your credit cards and your driver’s license. That piece of paper <em>is</em> the money. Hand it to someone, and they scan it, swap the lock, and the note is theirs. You no longer hold a working key. The paper in their pocket is now worthless — the value has moved.</p>
 <p>This is not a metaphor. The printed QR code holds the actual key. Losing it is like losing a hundred-dollar bill: whoever finds it can spend it. Keeping it safe is the same responsibility as keeping cash safe. There is no recovery hotline, no "report this stolen" button, no bank to reverse the transaction. That is what bearer means, and it is the entire point.</p>
 
 <h3>Gift It</h3>
@@ -191,7 +199,7 @@
 <p>A sealed envelope in a safe deposit box, containing printed QR codes for several notes, functions exactly like an envelope of cash. Whoever opens it holds the keys. Whoever holds the keys holds the notes. No executor, no probate court, no third-party permission is needed for the value to transfer — though, as with physical cash, the <em>legal</em> arrangements around inheritance are a separate matter the system does not and cannot address. The system guarantees only that possession of the key is possession of the note.</p>
 
 <h3>Pay at a Market Stall</h3>
-<p>You are buying tomatoes. The vendor displays a QR code — their payment request. You scan it with your wallet app, select the note you want to pay with, and your phone swaps the lock directly to the vendor's key. Under one second later, the note is theirs. You pocket your tomatoes. The vendor never saw your name, your address, or your account. You never saw theirs. The transaction is settled, final, and forgettable — just like cash.</p>
+<p>You are buying tomatoes. The vendor displays a QR code — their payment request. You scan it with your wallet app, select the note you want to pay with, and your phone swaps the lock directly to the vendor’s key. Under one second later, the note is theirs. You pocket your tomatoes. The vendor never saw your name, your address, or your account. You never saw theirs. The transaction is settled, final, and forgettable — just like cash.</p>
 
 <h3>Store It Cold</h3>
 <p>Worried about hackers? Print your notes as QR codes, put them in a fireproof box, and delete the app. The notes exist on the blockchain. The keys exist on paper. No internet-connected device holds them. When you want to spend, scan the QR code back into a wallet app, swap the lock immediately (in case someone copied the paper while it was stored), and transact normally.</p>
@@ -205,7 +213,7 @@
 <h2 id="observer"><span class="kicker">honest boundaries</span>What an Observer Can and Cannot See</h2>
 <p>Marigold is not a privacy coin, and this litepaper will not pretend it is. Here is exactly what someone watching the system can figure out:</p>
 <div class="cansee"><p><strong>They can see:</strong> Every note, every value, every operation, the total supply, and the complete current state of the system. All of it is in plain view. Nothing is encrypted, ever.</p></div>
-<div class="cansee"><p><strong>They can see:</strong> The chain of operations — which note was swapped into which new note, when splits and merges happened, timing patterns. A determined analyst studying the public records can identify behavioral patterns: rapid successive payments, split-then-spend sequences, or a merchant's daily accept-and-merge rhythm.</p></div>
+<div class="cansee"><p><strong>They can see:</strong> The chain of operations — which note was swapped into which new note, when splits and merges happened, timing patterns. A determined analyst studying the public records can identify behavioral patterns: rapid successive payments, split-then-spend sequences, or a merchant’s daily accept-and-merge rhythm.</p></div>
 <div class="cansee"><p><strong>They can see:</strong> Who created and redeemed notes, if they can link a regular blockchain address to a real-world identity. The points where Marigold connects to the traditional blockchain world are fully visible.</p></div>
 <div class="cannotsee"><p><strong>They cannot see:</strong> Any identity attached to a payment within the system. There is nothing to see, because the data was never recorded.</p></div>
 <p>A note blends in with every other note of the same value — a 100-MAGLD note looks like every other 100-MAGLD note and nothing beyond that group. Wallet software can blur behavioral patterns (slightly randomizing timing, grouping operations together, varying which note sizes are used for fees), but this is good habits, not magic. Marigold makes no stronger claim.</p>
@@ -230,7 +238,7 @@
 
 <hr>
 
-<h2 id="economics"><span class="kicker">economics</span>At a Glance</h2>
+<h2 id="economics"><span class="kicker">economics</span>Economics at a Glance</h2>
 <ul class="facts">
   <li><b>Supply:</b> 210,000,000 MAGLD, hard cap. No premine, no dev fund, no allocation of any kind.</li>
   <li><b>Launch:</b> Fair launch from day one. Software available to everyone in advance. Everyone starts on equal footing.</li>
@@ -244,8 +252,8 @@
 
 <h2 id="security"><span class="kicker">launch security</span>Training Wheels That Come Off</h2>
 <p>A new proof-of-work chain has low mining power, and low mining power invites attacks. Marigold launches with a temporary, fully disclosed safeguard called <strong>finality anchors</strong>: five publicly identified trustees periodically co-sign (requiring at least 3 of 5) a recent block, making it permanent and irreversible. No one can undo an anchored block.</p>
-<p>The trustees cannot censor transactions, create coins, move anyone's funds, or produce blocks. Their only power is to prevent undoing completed transactions. If they go silent, the chain continues normally as a standard proof-of-work network — somewhat less protected, but fully operational.</p>
-<p>The safeguard is designed to retire. Once the network's mining power grows strong enough that attacks are prohibitively expensive, anchors step down from mandatory to advisory to fully expired. Before that happens, the selection of successor trustees is intended to pass to note-holder governance — so even the training wheels' remnant transfers from founders to the community before they are removed entirely.</p>
+<p>The trustees cannot censor transactions, create coins, move anyone’s funds, or produce blocks. Their only power is to prevent undoing completed transactions. If they go silent, the chain continues normally as a standard proof-of-work network — somewhat less protected, but fully operational.</p>
+<p>The safeguard is designed to retire. Once the network’s mining power grows strong enough that attacks are prohibitively expensive, anchors step down from mandatory to advisory to fully expired. Before that happens, the selection of successor trustees is intended to pass to note-holder governance — so even the training wheels' remnant transfers from founders to the community before they are removed entirely.</p>
 
 <hr>
 
