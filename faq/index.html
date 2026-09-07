@@ -79,7 +79,7 @@
       <tr><td>Who sees your address</td><td>Whoever runs the node</td><td>Nobody</td></tr>
     </table>
 
-    <p><strong>What "sees your notes" actually means.</strong> The chain records
+    <p><strong>What a node can see.</strong> The chain records
     that a note was retired and a new one issued. It never records who did it,
     or that the two belong to the same person — that is the whole design. But
     your wallet asks a node about <em>its own</em> notes, and those questions
@@ -87,10 +87,10 @@
     learn which notes are held by the same wallet. It is the one place that
     linkage exists, and it exists only because you asked someone else.</p>
 
-    <p><strong>What it does not mean.</strong> A node cannot spend your notes,
-    cannot see your keys, and cannot stop you paying someone. Your money is not
-    at risk either way. What is at stake is whether a stranger can tell your
-    notes apart from everyone else's.</p>
+    <p><strong>What a node cannot do.</strong> It cannot spend your notes, see
+    your keys, or stop you paying someone. Your money is not at risk either way.
+    What is at stake is only whether a stranger can tell your notes apart from
+    everyone else's.</p>
 
     <p><strong>A reasonable rule.</strong> Use the public node while you are
     trying Marigold out, or for money you would carry in a pocket. Run your own
@@ -138,9 +138,41 @@
     <p>They are gone. This is the part of bearer money that has no soft edge:
     there is no recovery, no support line, no way to reverse it, exactly as with
     a banknote you drop in the street.</p>
-    <p>So back up your note vault, and keep the 24 recovery words somewhere a
-    fire will not reach. The words are the real backup — a copied file protects
-    you from a mistake, the words protect you from a dead disk.</p>
+    <p>So back up your note vault — see the next answer, and please read it
+    rather than assuming it works the way other wallets do. It does not.</p>
+  </details>
+
+  <details id="words-are-not-a-backup">
+    <summary>Are the 24 recovery words a backup of my money?</summary>
+    <p><strong>No — and this is the most expensive thing to get wrong about
+    Marigold.</strong></p>
+
+    <p>In most crypto wallets a recovery phrase <em>is</em> the money: type the
+    words into a new device and every coin reappears, because the coins are
+    entries on a ledger and the phrase derives the keys that claim them.</p>
+
+    <p>Marigold does not work like that. Every note is its own independent
+    secret. Nothing derives them, because if anything could, they would not be
+    bearer instruments. The notes are <strong>files</strong> in your vault. The
+    words unlock those files — they are not a copy of them.</p>
+
+    <table>
+      <tr><th>What you have</th><th>What you can recover</th></tr>
+      <tr><td>Vault files + your wallet password</td><td>Everything</td></tr>
+      <tr><td>Vault files + the 24 words</td><td>Everything, even if the password is forgotten</td></tr>
+      <tr><td>The 24 words alone</td><td><strong>Nothing.</strong> A key to a vault that is not there</td></tr>
+      <tr><td>Vault files alone, no password, no words</td><td><strong>Nothing.</strong> A vault nothing opens</td></tr>
+    </table>
+
+    <p>So you need <strong>both</strong>, and they should not share a fate. Keep
+    a copy of the vault files somewhere the original disk failing will not take
+    with it, and keep the words somewhere separate — a fire that reaches one
+    should not reach the other.</p>
+
+    <p>In the wallet, <code>note vault backup &lt;folder&gt;</code> writes the
+    files and <code>note vault verify &lt;folder&gt;</code> checks a copy is
+    readable. Restoring takes both: <code>note vault restore &lt;folder&gt;
+    &lt;24 words&gt;</code>.</p>
   </details>
 
   <details id="cost-to-pay">
