@@ -1,0 +1,65 @@
+<!doctype html>
+<!--
+  Reviewer landing page for the whitepaper PDF. Deliberately unlinked from the
+  homepage: this exists so the draft can be handed to reviewers by URL, and
+  should stay unlisted until the paper is published.
+
+  The PDF is built from whitepaper/marigold-whitepaper.md in the marigold-node
+  repo by whitepaper/build-pdf.sh, and copied here. It is a build artefact
+  there (gitignored), so this repo holds the only published copy.
+-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Marigold Whitepaper — draft</title>
+<meta name="description" content="The Marigold whitepaper, draft, for review.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141f19; --note:#18291f; --note-edge:#0f1813; --gold:#e4a33d;
+    --amber:#c9761f; --petal:#f3cf82; --cream:#efe7d3; --moss:#9aa894;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--cream); color:var(--ink);
+    font-family:"Fraunces",serif; font-weight:300; line-height:1.65;
+    display:flex; align-items:center; justify-content:center;
+    min-height:100vh; padding:2rem 1.25rem;
+  }
+  main{max-width:34rem; width:100%}
+  .kicker{
+    font-family:"IBM Plex Mono",monospace; font-size:.7rem; font-weight:500;
+    letter-spacing:.22em; text-transform:uppercase; color:var(--amber);
+    margin-bottom:.9rem;
+  }
+  h1{
+    font-size:clamp(1.9rem,6vw,2.7rem); font-weight:400; line-height:1.15;
+    margin:0 0 1.1rem;
+  }
+  p{margin:0 0 1.1rem; color:#33453b}
+  .rule{height:1px; background:var(--moss); opacity:.45; margin:1.6rem 0}
+  .btn{
+    display:inline-block; font-family:"IBM Plex Mono",monospace;
+    font-size:.78rem; letter-spacing:.12em; text-transform:uppercase;
+    text-decoration:none; padding:.85rem 1.5rem; border-radius:2px;
+    background:var(--gold); color:var(--note-edge); border:1px solid var(--amber);
+  }
+  .btn:hover{background:var(--petal)}
+  .meta{
+    font-family:"IBM Plex Mono",monospace; font-size:.72rem;
+    letter-spacing:.06em; color:var(--moss); margin-top:1.6rem;
+  }
+</style>
+<main>
+  <div class="kicker">Marigold · whitepaper</div>
+  <h1>Digital cash with a fully auditable chain</h1>
+  <p>The full technical paper: the note pool, the conservation rule, the five
+  operations, what an observer can and cannot see, and the launch security
+  posture — set out in detail and with its limits stated.</p>
+  <p>This is a working draft, circulated for review. It will change.</p>
+  <div class="rule"></div>
+  <a class="btn" href="marigold-whitepaper.pdf" download>Download the PDF</a>
+  <div class="meta">Draft v0.4 · August 2026 · note@marigold.cash</div>
+</main>
