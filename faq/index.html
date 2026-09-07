@@ -1,0 +1,156 @@
+<!doctype html>
+<!--
+  FAQ. Structured so entries can be added by copying one <details> block:
+  the anchor id is what the wallet and other pages link to, so ids are
+  permanent once published — change the question text freely, never the id.
+-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marigold — Questions</title>
+<meta name="description" content="Questions about Marigold: running your own node, what a node operator can see, and what bearer notes mean for you.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141f19; --note:#18291f; --note-edge:#0f1813; --gold:#e4a33d;
+    --amber:#c9761f; --petal:#f3cf82; --cream:#efe7d3; --moss:#9aa894;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--cream); color:var(--ink);
+    font-family:"Fraunces",serif; font-weight:300; line-height:1.7;
+    padding:3rem 1.25rem 5rem;
+  }
+  main{max-width:44rem; margin:0 auto}
+  .kicker{
+    font-family:"IBM Plex Mono",monospace; font-size:.7rem; font-weight:500;
+    letter-spacing:.22em; text-transform:uppercase; color:var(--amber);
+    margin-bottom:.9rem;
+  }
+  h1{font-size:clamp(2rem,6vw,2.8rem); font-weight:400; line-height:1.15; margin:0 0 .6rem}
+  .lede{color:#33453b; margin:0 0 2.5rem}
+  h2{
+    font-family:"IBM Plex Mono",monospace; font-size:.72rem; font-weight:500;
+    letter-spacing:.2em; text-transform:uppercase; color:var(--moss);
+    margin:3rem 0 .8rem; border-top:1px solid rgba(154,168,148,.45); padding-top:1.4rem;
+  }
+  details{border-bottom:1px solid rgba(154,168,148,.35); padding:1.1rem 0}
+  summary{
+    cursor:pointer; font-size:1.12rem; font-weight:400; list-style:none;
+    display:flex; gap:.8rem; align-items:baseline;
+  }
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"+"; color:var(--amber); font-family:"IBM Plex Mono",monospace; flex:none}
+  details[open] summary::before{content:"\2212"}
+  details > *:not(summary){color:#33453b}
+  details p:first-of-type{margin-top:1rem}
+  code{
+    font-family:"IBM Plex Mono",monospace; font-size:.85em;
+    background:rgba(154,168,148,.22); padding:.15em .45em; border-radius:4px;
+  }
+  table{border-collapse:collapse; width:100%; margin:1.2rem 0; font-size:.95rem}
+  th,td{text-align:left; padding:.6rem .8rem; border-bottom:1px solid rgba(154,168,148,.35); vertical-align:top}
+  th{font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.14em;
+     text-transform:uppercase; color:var(--moss); font-weight:500}
+  a{color:var(--amber)}
+  footer{margin-top:4rem; font-family:"IBM Plex Mono",monospace; font-size:.72rem;
+         letter-spacing:.06em; color:var(--moss)}
+</style>
+<main>
+  <div class="kicker">Marigold</div>
+  <h1>Questions</h1>
+  <p class="lede">Short answers, with the trade-offs stated rather than smoothed over.</p>
+
+  <h2>Connecting</h2>
+
+  <details id="public-or-local" open>
+    <summary>Should I use the public node or run my own?</summary>
+    <p>Your wallet holds your notes. It still has to ask <em>a node</em> what is
+    happening on the network — whether a note is real, whether a payment landed.
+    That node is the only party in the whole system that learns anything about
+    you.</p>
+
+    <table>
+      <tr><th></th><th>Public node</th><th>Your own node</th></tr>
+      <tr><td>Ready</td><td>Immediately</td><td>After it catches up with the network</td></tr>
+      <tr><td>Disk</td><td>None</td><td>Several gigabytes, and it grows</td></tr>
+      <tr><td>Who sees your notes</td><td>Whoever runs the node</td><td>Nobody</td></tr>
+      <tr><td>Who sees your address</td><td>Whoever runs the node</td><td>Nobody</td></tr>
+    </table>
+
+    <p><strong>What "sees your notes" actually means.</strong> The chain records
+    that a note was retired and a new one issued. It never records who did it,
+    or that the two belong to the same person — that is the whole design. But
+    your wallet asks a node about <em>its own</em> notes, and those questions
+    arrive together, from one network address. A node operator can therefore
+    learn which notes are held by the same wallet. It is the one place that
+    linkage exists, and it exists only because you asked someone else.</p>
+
+    <p><strong>What it does not mean.</strong> A node cannot spend your notes,
+    cannot see your keys, and cannot stop you paying someone. Your money is not
+    at risk either way. What is at stake is whether a stranger can tell your
+    notes apart from everyone else's.</p>
+
+    <p><strong>A reasonable rule.</strong> Use the public node while you are
+    trying Marigold out, or for money you would carry in a pocket. Run your own
+    for anything you would rather nobody could correlate. In the wallet:</p>
+
+    <p><code>mynode start</code> runs a node inside the wallet itself — no
+    separate program to install or supervise. <code>connect public</code> uses
+    one we run instead. You can switch whenever you like; the notes are yours
+    either way.</p>
+  </details>
+
+  <details id="who-runs-public">
+    <summary>Who runs the public node?</summary>
+    <p>We do. It is the same machine that runs one of the network's seed nodes,
+    and it can see exactly what the answer above describes: the address you
+    connect from, and which notes your wallet asks about.</p>
+    <p>We would rather say that plainly than have you assume a public node is
+    neutral. It is not — no node is. That is why the wallet can run its own.</p>
+  </details>
+
+  <details id="node-cost">
+    <summary>How much disk and time does running my own node take?</summary>
+    <p>Several gigabytes, growing as the chain does, and the first run has to
+    download and verify the chain before your balance is accurate. You can keep
+    using the wallet while it catches up; figures will be incomplete until it
+    has.</p>
+    <p>It lives beside your wallet files, so deleting your Marigold directory
+    removes both — you will not be left with gigabytes you cannot account for.</p>
+  </details>
+
+  <h2>Notes and money</h2>
+
+  <details id="what-is-a-note">
+    <summary>What is a note, exactly?</summary>
+    <p>A key that is worth a fixed amount. Not a balance in an account — an
+    object you hold, like a banknote. Holding the key <em>is</em> owning the
+    money, and handing the key over <em>is</em> paying someone. There is no
+    sender, no receiver and no account anywhere in it.</p>
+    <p>Notes come in fixed sizes — 0.01, 0.1, 1, 10, 100 and up — so one 10
+    MAGLD note looks exactly like every other 10 MAGLD note.</p>
+  </details>
+
+  <details id="lost-notes">
+    <summary>What happens if I lose my notes?</summary>
+    <p>They are gone. This is the part of bearer money that has no soft edge:
+    there is no recovery, no support line, no way to reverse it, exactly as with
+    a banknote you drop in the street.</p>
+    <p>So back up your note vault, and keep the 24 recovery words somewhere a
+    fire will not reach. The words are the real backup — a copied file protects
+    you from a mistake, the words protect you from a dead disk.</p>
+  </details>
+
+  <details id="cost-to-pay">
+    <summary>What does it cost to pay someone?</summary>
+    <p>0.01 MAGLD — one hundredth of a coin — for any everyday payment, however
+    much you are sending. The fee is a single small note handed over with the
+    payment, so a coffee and a car cost the same to move. Only unusually large
+    operations, bundling dozens of notes at once, step up to two or three
+    hundredths.</p>
+  </details>
+
+  <footer>marigold.cash · <a href="/litepaper/">Litepaper</a></footer>
+</main>
