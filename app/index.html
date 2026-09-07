@@ -1,0 +1,343 @@
+<!doctype html>
+<!--
+  Marigold — Telegram Mini App.
+  ============================
+
+  Shows the notes mirrored to this phone. Read-only for now: it decrypts and
+  displays, it does not spend. Spending is a pool operation that needs a node
+  connection and signing, and that is a much larger piece than this one.
+
+  WHAT IT DOES
+
+  The desktop wallet's `note mirror export` produces base64 blocks. Each block
+  is the paper-backup page format, so one encoder is used everywhere:
+
+      [ backup_id 8 | chunk_index u16 LE | chunk_count u16 LE | version 1 ]
+      [ "MGS2" | salt 32 | nonce 24 | XChaCha20-Poly1305(ciphertext ‖ tag) ]
+
+  and the plaintext is
+
+      [ count u16 LE ][ count × ( serial 32 | secret key 32 | denomination 1 ) ]
+
+  The key is Argon2id over the passphrase and that salt, with the same
+  parameters the wallet uses — m = 19,456 KiB, t = 2, p = 1. Change either side
+  and both must change together.
+
+  WHERE THE SECRETS GO
+
+  Nowhere. The passphrase is held in a variable for the life of the decryption
+  and never stored; the blocks in Telegram's CloudStorage are ciphertext, which
+  is the whole point — Telegram is dumb storage and cannot read them. Note keys
+  are held in memory only while the page is open.
+-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Marigold</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<!--
+  TWO libraries, and the split is not arbitrary.
+
+  libsodium's own crypto_pwhash cannot be used: it requires a salt of exactly
+  16 bytes and the wallet writes 32, so it refuses the block outright with
+  "invalid salt length". hash-wasm's argon2id takes the salt as it is. The rest
+  — XChaCha20-Poly1305 — is libsodium, and the plain build rather than "sumo"
+  because password hashing was the only thing sumo was needed for.
+
+  Verified against a block produced by the Rust wallet, not assumed.
+-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/libsodium-wrappers/0.7.13/sodium.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hash-wasm@4.11.0/dist/argon2.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141f19; --note:#18291f; --gold:#e4a33d; --amber:#c9761f;
+    --petal:#f3cf82; --cream:#efe7d3; --moss:#9aa894; --bad:#b3402f;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--cream); color:var(--ink);
+    font-family:"Fraunces",serif; font-weight:300; line-height:1.6;
+    padding:1.5rem 1.1rem 3rem; -webkit-text-size-adjust:100%;
+  }
+  main{max-width:30rem; margin:0 auto}
+  .kicker{
+    font-family:"IBM Plex Mono",monospace; font-size:.64rem; font-weight:500;
+    letter-spacing:.22em; text-transform:uppercase; color:var(--amber);
+  }
+  h1{font-size:1.6rem; font-weight:400; margin:.3rem 0 1.2rem}
+  .total{
+    font-family:"IBM Plex Mono",monospace; font-size:2rem; font-weight:500;
+    letter-spacing:-.02em; margin:.2rem 0;
+  }
+  .sub{color:#4a5c52; font-size:.9rem; margin:0 0 1.6rem}
+  .note{
+    display:flex; justify-content:space-between; align-items:baseline; gap:1rem;
+    background:#fff; border:1px solid #d8cfb8; border-radius:12px;
+    padding:.8rem 1rem; margin-bottom:.5rem;
+  }
+  .note .amt{font-family:"IBM Plex Mono",monospace; font-weight:500}
+  .note .sn{
+    font-family:"IBM Plex Mono",monospace; font-size:.6rem; color:var(--moss);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:11rem;
+  }
+  label{display:block; font-size:.82rem; color:#4a5c52; margin:1rem 0 .35rem}
+  input,textarea{
+    width:100%; font-family:"IBM Plex Mono",monospace; font-size:.85rem;
+    padding:.7rem .8rem; border:1px solid #d8cfb8; border-radius:10px;
+    background:#fff; color:var(--ink);
+  }
+  textarea{min-height:7rem; resize:vertical; word-break:break-all}
+  button{
+    width:100%; margin-top:.9rem; padding:.85rem 1rem; border-radius:10px;
+    font-family:"IBM Plex Mono",monospace; font-size:.78rem; letter-spacing:.1em;
+    text-transform:uppercase; background:var(--gold); color:var(--note);
+    border:1px solid var(--amber); cursor:pointer;
+  }
+  button.quiet{background:transparent; color:#4a5c52; border-color:#d8cfb8}
+  button:disabled{opacity:.5}
+  .msg{margin-top:1rem; font-size:.88rem; padding:.7rem .9rem; border-radius:10px}
+  .msg.bad{background:#f7e2de; color:var(--bad)}
+  .msg.ok{background:#e3ecdf; color:#2f5138}
+  .hint{font-size:.78rem; color:var(--moss); margin-top:.5rem}
+  hr{border:0; border-top:1px solid rgba(154,168,148,.4); margin:2rem 0}
+  [hidden]{display:none!important}
+</style>
+<main>
+  <div class="kicker">Marigold</div>
+  <h1 id="title">Your notes</h1>
+
+  <section id="locked">
+    <p class="sub">The notes on this phone are encrypted. Enter the passphrase you
+    chose when you ran <code>note mirror export</code>.</p>
+    <label for="pass">Passphrase</label>
+    <input id="pass" type="password" autocomplete="off" autocapitalize="off" spellcheck="false">
+    <button id="unlock">Unlock</button>
+    <p class="hint">Forgetting it costs nothing — these notes are copies. The
+    originals are in the wallet that made them.</p>
+  </section>
+
+  <section id="wallet" hidden>
+    <div class="total" id="total">—</div>
+    <p class="sub" id="count"></p>
+    <div id="notes"></div>
+    <hr>
+    <button class="quiet" id="lock">Lock</button>
+  </section>
+
+  <section id="empty" hidden>
+    <p class="sub">Nothing is stored on this phone yet. In the desktop wallet run
+    <code>note mirror &lt;amount&gt;</code> then <code>note mirror export</code>,
+    and paste the blocks here.</p>
+    <label for="blocks">Blocks from the wallet</label>
+    <textarea id="blocks" autocapitalize="off" spellcheck="false"
+      placeholder="Paste one block per line"></textarea>
+    <button id="save">Save to this phone</button>
+    <p class="hint">They are stored exactly as the wallet encrypted them.
+    Telegram holds the ciphertext and cannot read it.</p>
+  </section>
+
+  <div id="msg" class="msg" hidden></div>
+</main>
+<script>
+(function () {
+  const tg = window.Telegram && window.Telegram.WebApp;
+  if (tg) { tg.ready(); tg.expand(); }
+
+  const KEY_PREFIX = 'mirror_';
+  const DENOMS = [0.01, 0.1, 1, 10, 100, 1000, 10000, 100000];
+  // Must equal the wallet's Argon2 parameters exactly — the Rust side uses
+  // Argon2::default(), which is Argon2id v19 with m = 19 * 1024 KiB, t = 2,
+  // p = 1. Change either side and both must change together.
+  const ARGON2 = { parallelism: 1, iterations: 2, memorySize: 19 * 1024, hashLength: 32 };
+
+  const $ = (id) => document.getElementById(id);
+  const show = (el, on) => { el.hidden = !on; };
+
+  function say(text, bad) {
+    const box = $('msg');
+    box.textContent = text;
+    box.className = 'msg ' + (bad ? 'bad' : 'ok');
+    show(box, true);
+  }
+  function clearSay() { show($('msg'), false); }
+
+  // --- Telegram CloudStorage, promisified -----------------------------------
+  const cloud = {
+    supported: () => !!(tg && tg.CloudStorage),
+    keys: () => new Promise((res, rej) =>
+      tg.CloudStorage.getKeys((e, v) => (e ? rej(new Error(e)) : res(v || [])))),
+    get: (keys) => new Promise((res, rej) =>
+      tg.CloudStorage.getItems(keys, (e, v) => (e ? rej(new Error(e)) : res(v || {})))),
+    set: (key, value) => new Promise((res, rej) =>
+      tg.CloudStorage.setItem(key, value, (e) => (e ? rej(new Error(e)) : res()))),
+  };
+
+  // --- The wallet's container formats ---------------------------------------
+  function b64ToBytes(s) {
+    const bin = atob(s.trim());
+    const out = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
+  }
+
+  // Returns { backupId, index, count, salt, nonce, body } or throws.
+  function readPage(bytes) {
+    if (bytes.length < 13 + 4 + 32 + 24 + 16) throw new Error('block is too short to be real');
+    const dv = new DataView(bytes.buffer, bytes.byteOffset);
+    const backupId = Array.from(bytes.slice(0, 8)).map(b => b.toString(16).padStart(2, '0')).join('');
+    const index = dv.getUint16(8, true);
+    const count = dv.getUint16(10, true);
+    const magic = String.fromCharCode(...bytes.slice(13, 17));
+    if (magic !== 'MGS2') throw new Error('block was written by a different version of the wallet');
+    return {
+      backupId, index, count,
+      salt: bytes.slice(17, 49),
+      nonce: bytes.slice(49, 73),
+      body: bytes.slice(73),
+    };
+  }
+
+  function readNotes(plain) {
+    const dv = new DataView(plain.buffer, plain.byteOffset);
+    const n = dv.getUint16(0, true);
+    const notes = [];
+    for (let i = 0; i < n; i++) {
+      const at = 2 + i * 65;
+      const sn = Array.from(plain.slice(at, at + 32)).map(b => b.toString(16).padStart(2, '0')).join('');
+      const d = plain[at + 64];
+      if (d >= DENOMS.length) throw new Error('unknown denomination in block');
+      notes.push({ sn, value: DENOMS[d] });
+      // The secret key sits at at+32..at+64. This page does not keep it: it
+      // cannot spend, so holding it would be risk without purpose.
+    }
+    return notes;
+  }
+
+  async function decryptPage(page, passphrase) {
+    await sodium.ready;
+    const key = await hashwasm.argon2id({
+      password: passphrase, salt: page.salt, ...ARGON2, outputType: 'binary',
+    });
+    let plain;
+    try {
+      plain = sodium.crypto_aead_xchacha20poly1305_ietf_decrypt(null, page.body, null, page.nonce, key);
+    } catch (_) {
+      // The tag failing means the key is wrong, which in practice means the
+      // passphrase is. Saying "wrong passphrase" is the useful reading.
+      throw new Error('wrong passphrase');
+    } finally {
+      key.fill(0);
+    }
+    return readNotes(plain);
+  }
+
+  // --- Screens ---------------------------------------------------------------
+  let storedBlocks = [];
+
+  function render(notes) {
+    const total = notes.reduce((a, n) => a + n.value, 0);
+    $('total').textContent = total.toLocaleString(undefined, { maximumFractionDigits: 2 }) + ' MAGLD';
+    $('count').textContent = notes.length + (notes.length === 1 ? ' note' : ' notes') + ' on this phone';
+    const list = $('notes');
+    list.innerHTML = '';
+    notes.sort((a, b) => b.value - a.value).forEach((n) => {
+      const row = document.createElement('div');
+      row.className = 'note';
+      const amt = document.createElement('span');
+      amt.className = 'amt';
+      amt.textContent = n.value.toLocaleString(undefined, { maximumFractionDigits: 2 });
+      const sn = document.createElement('span');
+      sn.className = 'sn';
+      sn.textContent = n.sn.slice(0, 16) + '…';
+      row.append(amt, sn);
+      list.appendChild(row);
+    });
+    show($('locked'), false);
+    show($('empty'), false);
+    show($('wallet'), true);
+  }
+
+  async function load() {
+    if (!cloud.supported()) {
+      say('Open this from the Marigold bot in Telegram — it stores your notes there.', true);
+      show($('locked'), false);
+      return;
+    }
+    try {
+      const keys = (await cloud.keys()).filter(k => k.startsWith(KEY_PREFIX));
+      if (!keys.length) { show($('locked'), false); show($('empty'), true); return; }
+      const items = await cloud.get(keys);
+      storedBlocks = keys.sort().map(k => items[k]).filter(Boolean);
+      show($('locked'), true);
+    } catch (err) {
+      say('Could not read from Telegram storage: ' + err.message, true);
+    }
+  }
+
+  $('unlock').addEventListener('click', async () => {
+    const pass = $('pass').value;
+    if (!pass) { say('Enter the passphrase.', true); return; }
+    $('unlock').disabled = true;
+    clearSay();
+    try {
+      let notes = [];
+      let expected = null;
+      for (const b of storedBlocks) {
+        const page = readPage(b64ToBytes(b));
+        if (expected === null) expected = page.count;
+        notes = notes.concat(await decryptPage(page, pass));
+      }
+      // Every block is needed: one missing means the notes inside it are gone.
+      // Saying so beats showing a total that is quietly short.
+      if (expected !== null && storedBlocks.length !== expected) {
+        say(`Only ${storedBlocks.length} of ${expected} blocks are here — the total below is incomplete.`, true);
+      }
+      $('pass').value = '';
+      render(notes);
+    } catch (err) {
+      say(err.message, true);
+    } finally {
+      $('unlock').disabled = false;
+    }
+  });
+
+  $('lock').addEventListener('click', () => {
+    $('notes').innerHTML = '';
+    $('total').textContent = '—';
+    show($('wallet'), false);
+    show($('locked'), true);
+    clearSay();
+  });
+
+  $('save').addEventListener('click', async () => {
+    const lines = $('blocks').value.split(/\s*\n\s*/).map(s => s.trim()).filter(Boolean);
+    if (!lines.length) { say('Paste at least one block.', true); return; }
+    $('save').disabled = true;
+    clearSay();
+    try {
+      // Validate before storing. A block that cannot be parsed will never
+      // decrypt either, and finding that out later — with the wallet that made
+      // it no longer to hand — is the wrong moment.
+      lines.forEach((line, i) => {
+        const page = readPage(b64ToBytes(line));
+        if (page.index !== i && lines.length > 1) {
+          throw new Error(`block ${i + 1} says it is number ${page.index + 1} — paste them in order`);
+        }
+      });
+      for (let i = 0; i < lines.length; i++) {
+        await cloud.set(KEY_PREFIX + String(i).padStart(3, '0'), lines[i]);
+      }
+      $('blocks').value = '';
+      say(`Saved ${lines.length} block(s).`, false);
+      await load();
+    } catch (err) {
+      say(err.message, true);
+    } finally {
+      $('save').disabled = false;
+    }
+  });
+
+  load();
+})();
+</script>
