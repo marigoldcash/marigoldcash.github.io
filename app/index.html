@@ -1,34 +1,21 @@
 <!doctype html>
 <!--
-  Marigold — Telegram Mini App.
-  ============================
+  Marigold — Telegram Mini App: the testnet faucet.
+  =================================================
 
-  Shows the notes mirrored to this phone. Read-only for now: it decrypts and
-  displays, it does not spend. Spending is a pool operation that needs a node
-  connection and signing, and that is a much larger piece than this one.
+  Opened from the Marigold bot. One tap asks faucet.marigold.cash for a
+  bundle of three bearer notes and shows them as QR codes and text, to be
+  taken into a wallet with 'receive <code>'. The faucet does the work; this
+  page is the front of it inside Telegram.
 
-  WHAT IT DOES
+  The claim carries Telegram's launch data (initData) in a header. The faucet
+  verifies it against the bot token and rate-limits per Telegram user rather
+  than per IP — a phone on a carrier's network shares its address with
+  thousands of others. Outside Telegram the same page works per IP.
 
-  The desktop wallet's `note mirror export` produces base64 blocks. Each block
-  is the paper-backup page format, so one encoder is used everywhere:
-
-      [ backup_id 8 | chunk_index u16 LE | chunk_count u16 LE | version 1 ]
-      [ "MGS2" | salt 32 | nonce 24 | XChaCha20-Poly1305(ciphertext ‖ tag) ]
-
-  and the plaintext is
-
-      [ count u16 LE ][ count × ( serial 32 | secret key 32 | denomination 1 ) ]
-
-  The key is Argon2id over the passphrase and that salt, with the same
-  parameters the wallet uses — m = 19,456 KiB, t = 2, p = 1. Change either side
-  and both must change together.
-
-  WHERE THE SECRETS GO
-
-  Nowhere. The passphrase is held in a variable for the life of the decryption
-  and never stored; the blocks in Telegram's CloudStorage are ciphertext, which
-  is the whole point — Telegram is dumb storage and cannot read them. Note keys
-  are held in memory only while the page is open.
+  A wallet on the phone is a separate decision (FORK-PLAN P8.0h): mobile is a
+  Telegram bot against the wallet at home. This page holds no keys and never
+  did; the notes it shows are the faucet's until a wallet takes them.
 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -40,8 +27,8 @@
   rendering of the note on the homepage; regenerate it from there if that
   note changes, do not redraw it.
 -->
-<meta property="og:title" content="Marigold — Web Wallet">
-<meta property="og:description" content="The notes on your phone. Read-only: it shows what you hold, it does not spend.">
+<meta property="og:title" content="Marigold — Testnet Faucet">
+<meta property="og:description" content="Take a note. Three testnet bearer notes, 11.10 MAGLD, straight from Telegram.">
 <meta property="og:url" content="https://marigold.cash/app/">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://marigold.cash/app/preview.png">
@@ -49,19 +36,6 @@
 <meta property="og:image:height" content="360">
 <meta name="twitter:card" content="summary_large_image">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<!--
-  TWO libraries, and the split is not arbitrary.
-
-  libsodium's own crypto_pwhash cannot be used: it requires a salt of exactly
-  16 bytes and the wallet writes 32, so it refuses the block outright with
-  "invalid salt length". hash-wasm's argon2id takes the salt as it is. The rest
-  — XChaCha20-Poly1305 — is libsodium, and the plain build rather than "sumo"
-  because password hashing was the only thing sumo was needed for.
-
-  Verified against a block produced by the Rust wallet, not assumed.
--->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/libsodium-wrappers/0.7.13/sodium.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/hash-wasm@4.11.0/dist/argon2.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -115,243 +89,108 @@
   .msg.ok{background:#e3ecdf; color:#2f5138}
   .hint{font-size:.78rem; color:var(--moss); margin-top:.5rem}
   hr{border:0; border-top:1px solid rgba(154,168,148,.4); margin:2rem 0}
+  .card{background:#fff; border:1px solid #d8cfb8; border-radius:12px; padding:1rem; margin-bottom:.8rem}
+  .card h3{font-family:"IBM Plex Mono",monospace; font-size:.9rem; font-weight:500; margin:0 0 .6rem}
+  .card svg{display:block; margin:0 auto .6rem; max-width:180px; height:auto}
+  .payload{font-family:"IBM Plex Mono",monospace; font-size:.66rem; word-break:break-all; background:var(--cream); border-radius:8px; padding:.6rem}
+  .warn{background:#fbecd2; border:1px solid var(--gold); border-radius:10px; padding:.7rem .9rem; font-size:.88rem; margin:1rem 0}
+  .how code{font-family:"IBM Plex Mono",monospace; background:#e5dcc4; border-radius:4px; padding:1px 5px; font-size:.8rem}
+  .status{font-family:"IBM Plex Mono",monospace; font-size:.68rem; color:var(--moss); margin-top:1.4rem}
   [hidden]{display:none!important}
 </style>
 <main>
-  <div class="kicker">Marigold</div>
-  <h1 id="title">Your notes</h1>
+  <div class="kicker">Marigold · testnet faucet</div>
+  <h1>Take a note.</h1>
+  <p class="sub">One tap gives you three real Marigold bearer notes — 10, 1 and
+  0.1 MAGLD, 11.10 in all. Testnet money: worthless by design, real in every
+  other way.</p>
 
-  <section id="locked">
-    <p class="sub">The notes on this phone are encrypted. Enter the passphrase you
-    chose when you ran <code>note mirror export</code>.</p>
-    <label for="pass">Passphrase</label>
-    <input id="pass" type="password" autocomplete="off" autocapitalize="off" spellcheck="false">
-    <button id="unlock">Unlock</button>
-    <p class="hint">Forgetting it costs nothing — these notes are copies. The
-    originals are in the wallet that made them.</p>
-  </section>
-
-  <section id="wallet" hidden>
-    <div class="total" id="total">—</div>
-    <p class="sub" id="count"></p>
-    <div id="notes"></div>
-    <hr>
-    <button class="quiet" id="lock">Lock</button>
-  </section>
-
-  <section id="empty" hidden>
-    <p class="sub">Nothing is stored on this phone yet. In the desktop wallet run
-    <code>note mirror &lt;amount&gt;</code> then <code>note mirror export</code>,
-    and paste the blocks here.</p>
-    <label for="blocks">Blocks from the wallet</label>
-    <textarea id="blocks" autocapitalize="off" spellcheck="false"
-      placeholder="Paste one block per line"></textarea>
-    <button id="save">Save to this phone</button>
-    <p class="hint">They are stored exactly as the wallet encrypted them.
-    Telegram holds the ciphertext and cannot read it.</p>
-  </section>
-
+  <button id="claim">Claim a note bundle</button>
   <div id="msg" class="msg" hidden></div>
+
+  <div class="warn" id="warn" hidden><strong>These are bearer notes.</strong>
+  Whoever holds these codes owns the money. Take them into your wallet now,
+  then treat this screen as spent paper.</div>
+  <div id="notes"></div>
+
+  <section class="how" id="how" hidden>
+    <p class="sub">In your wallet, once it is connected: <code>receive &lt;code&gt;</code>
+    for each note, <strong>the big one first</strong>. Paste the text or scan
+    the QR from another screen. The wallet checks the note on the chain and
+    makes it yours alone; from that moment nobody else can spend it.</p>
+    <p class="hint">New here? The wallet is at
+    <a href="https://github.com/marigoldcash/marigold_docker">github.com/marigoldcash/marigold_docker</a>.</p>
+  </section>
+
+  <p class="status" id="status"></p>
 </main>
 <script>
 (function () {
   const tg = window.Telegram && window.Telegram.WebApp;
   if (tg) { tg.ready(); tg.expand(); }
-
-  const KEY_PREFIX = 'mirror_';
-  const DENOMS = [0.01, 0.1, 1, 10, 100, 1000, 10000, 100000];
-  // Must equal the wallet's Argon2 parameters exactly — the Rust side uses
-  // Argon2::default(), which is Argon2id v19 with m = 19 * 1024 KiB, t = 2,
-  // p = 1. Change either side and both must change together.
-  const ARGON2 = { parallelism: 1, iterations: 2, memorySize: 19 * 1024, hashLength: 32 };
-
+  const FAUCET = 'https://faucet.marigold.cash';
   const $ = (id) => document.getElementById(id);
   const show = (el, on) => { el.hidden = !on; };
-
   function say(text, bad) {
     const box = $('msg');
     box.textContent = text;
     box.className = 'msg ' + (bad ? 'bad' : 'ok');
     show(box, true);
   }
-  function clearSay() { show($('msg'), false); }
 
-  // --- Telegram CloudStorage, promisified -----------------------------------
-  const cloud = {
-    supported: () => !!(tg && tg.CloudStorage),
-    keys: () => new Promise((res, rej) =>
-      tg.CloudStorage.getKeys((e, v) => (e ? rej(new Error(e)) : res(v || [])))),
-    get: (keys) => new Promise((res, rej) =>
-      tg.CloudStorage.getItems(keys, (e, v) => (e ? rej(new Error(e)) : res(v || {})))),
-    set: (key, value) => new Promise((res, rej) =>
-      tg.CloudStorage.setItem(key, value, (e) => (e ? rej(new Error(e)) : res()))),
-  };
-
-  // --- The wallet's container formats ---------------------------------------
-  function b64ToBytes(s) {
-    const bin = atob(s.trim());
-    const out = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
-    return out;
-  }
-
-  // Returns { backupId, index, count, salt, nonce, body } or throws.
-  function readPage(bytes) {
-    if (bytes.length < 13 + 4 + 32 + 24 + 16) throw new Error('block is too short to be real');
-    const dv = new DataView(bytes.buffer, bytes.byteOffset);
-    const backupId = Array.from(bytes.slice(0, 8)).map(b => b.toString(16).padStart(2, '0')).join('');
-    const index = dv.getUint16(8, true);
-    const count = dv.getUint16(10, true);
-    const magic = String.fromCharCode(...bytes.slice(13, 17));
-    if (magic !== 'MGS2') throw new Error('block was written by a different version of the wallet');
-    return {
-      backupId, index, count,
-      salt: bytes.slice(17, 49),
-      nonce: bytes.slice(49, 73),
-      body: bytes.slice(73),
-    };
-  }
-
-  function readNotes(plain) {
-    const dv = new DataView(plain.buffer, plain.byteOffset);
-    const n = dv.getUint16(0, true);
-    const notes = [];
-    for (let i = 0; i < n; i++) {
-      const at = 2 + i * 65;
-      const sn = Array.from(plain.slice(at, at + 32)).map(b => b.toString(16).padStart(2, '0')).join('');
-      const d = plain[at + 64];
-      if (d >= DENOMS.length) throw new Error('unknown denomination in block');
-      notes.push({ sn, value: DENOMS[d] });
-      // The secret key sits at at+32..at+64. This page does not keep it: it
-      // cannot spend, so holding it would be risk without purpose.
-    }
-    return notes;
-  }
-
-  async function decryptPage(page, passphrase) {
-    await sodium.ready;
-    const key = await hashwasm.argon2id({
-      password: passphrase, salt: page.salt, ...ARGON2, outputType: 'binary',
-    });
-    let plain;
+  // Copying can fail quietly (no permission, not focused). Say what happened.
+  async function copyText(text, button, payloadEl) {
+    const label = button.textContent;
+    const done = (t) => { button.textContent = t; setTimeout(() => { button.textContent = label; }, 1500); };
     try {
-      plain = sodium.crypto_aead_xchacha20poly1305_ietf_decrypt(null, page.body, null, page.nonce, key);
+      await navigator.clipboard.writeText(text);
+      done('Copied');
     } catch (_) {
-      // The tag failing means the key is wrong, which in practice means the
-      // passphrase is. Saying "wrong passphrase" is the useful reading.
-      throw new Error('wrong passphrase');
-    } finally {
-      key.fill(0);
-    }
-    return readNotes(plain);
-  }
-
-  // --- Screens ---------------------------------------------------------------
-  let storedBlocks = [];
-
-  function render(notes) {
-    const total = notes.reduce((a, n) => a + n.value, 0);
-    $('total').textContent = total.toLocaleString(undefined, { maximumFractionDigits: 2 }) + ' MAGLD';
-    $('count').textContent = notes.length + (notes.length === 1 ? ' note' : ' notes') + ' on this phone';
-    const list = $('notes');
-    list.innerHTML = '';
-    notes.sort((a, b) => b.value - a.value).forEach((n) => {
-      const row = document.createElement('div');
-      row.className = 'note';
-      const amt = document.createElement('span');
-      amt.className = 'amt';
-      amt.textContent = n.value.toLocaleString(undefined, { maximumFractionDigits: 2 });
-      const sn = document.createElement('span');
-      sn.className = 'sn';
-      sn.textContent = n.sn.slice(0, 16) + '…';
-      row.append(amt, sn);
-      list.appendChild(row);
-    });
-    show($('locked'), false);
-    show($('empty'), false);
-    show($('wallet'), true);
-  }
-
-  async function load() {
-    if (!cloud.supported()) {
-      say('Open this from the Marigold bot in Telegram — it stores your notes there.', true);
-      show($('locked'), false);
-      return;
-    }
-    try {
-      const keys = (await cloud.keys()).filter(k => k.startsWith(KEY_PREFIX));
-      if (!keys.length) { show($('locked'), false); show($('empty'), true); return; }
-      const items = await cloud.get(keys);
-      storedBlocks = keys.sort().map(k => items[k]).filter(Boolean);
-      show($('locked'), true);
-    } catch (err) {
-      say('Could not read from Telegram storage: ' + err.message, true);
+      const range = document.createRange();
+      range.selectNodeContents(payloadEl);
+      const sel = window.getSelection();
+      sel.removeAllRanges(); sel.addRange(range);
+      done('Select and copy');
     }
   }
 
-  $('unlock').addEventListener('click', async () => {
-    const pass = $('pass').value;
-    if (!pass) { say('Enter the passphrase.', true); return; }
-    $('unlock').disabled = true;
-    clearSay();
+  $('claim').addEventListener('click', async () => {
+    const btn = $('claim');
+    btn.disabled = true; btn.textContent = 'Minting…';
+    show($('msg'), false);
     try {
-      let notes = [];
-      let expected = null;
-      for (const b of storedBlocks) {
-        const page = readPage(b64ToBytes(b));
-        if (expected === null) expected = page.count;
-        notes = notes.concat(await decryptPage(page, pass));
+      const headers = {};
+      // Telegram's signed launch data: lets the faucet limit per user, not per IP.
+      if (tg && tg.initData) headers['X-Telegram-Init-Data'] = tg.initData;
+      const res = await fetch(FAUCET + '/api/claim', { method: 'POST', headers });
+      const body = await res.json();
+      if (!res.ok) throw new Error(body.error || ('HTTP ' + res.status));
+      const list = $('notes');
+      list.innerHTML = '';
+      for (const n of body.notes) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = '<h3>' + n.denomination_magld + ' MAGLD</h3>' + n.qr_svg +
+          '<div class="payload"></div><button class="quiet copy">Copy code</button>';
+        card.querySelector('.payload').textContent = n.payload;
+        card.querySelector('.copy').addEventListener('click', (e) => {
+          copyText(n.payload, e.target, card.querySelector('.payload'));
+        });
+        list.appendChild(card);
       }
-      // Every block is needed: one missing means the notes inside it are gone.
-      // Saying so beats showing a total that is quietly short.
-      if (expected !== null && storedBlocks.length !== expected) {
-        say(`Only ${storedBlocks.length} of ${expected} blocks are here — the total below is incomplete.`, true);
-      }
-      $('pass').value = '';
-      render(notes);
-    } catch (err) {
-      say(err.message, true);
-    } finally {
-      $('unlock').disabled = false;
+      show($('warn'), true);
+      show($('how'), true);
+      btn.textContent = 'Claimed — take your notes';
+      if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+    } catch (e) {
+      say(e.message === 'Failed to fetch' ? 'Could not reach the faucet. Try again in a moment.' : e.message, true);
+      btn.disabled = false; btn.textContent = 'Claim a note bundle';
+      if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
     }
   });
 
-  $('lock').addEventListener('click', () => {
-    $('notes').innerHTML = '';
-    $('total').textContent = '—';
-    show($('wallet'), false);
-    show($('locked'), true);
-    clearSay();
-  });
-
-  $('save').addEventListener('click', async () => {
-    const lines = $('blocks').value.split(/\s*\n\s*/).map(s => s.trim()).filter(Boolean);
-    if (!lines.length) { say('Paste at least one block.', true); return; }
-    $('save').disabled = true;
-    clearSay();
-    try {
-      // Validate before storing. A block that cannot be parsed will never
-      // decrypt either, and finding that out later — with the wallet that made
-      // it no longer to hand — is the wrong moment.
-      lines.forEach((line, i) => {
-        const page = readPage(b64ToBytes(line));
-        if (page.index !== i && lines.length > 1) {
-          throw new Error(`block ${i + 1} says it is number ${page.index + 1} — paste them in order`);
-        }
-      });
-      for (let i = 0; i < lines.length; i++) {
-        await cloud.set(KEY_PREFIX + String(i).padStart(3, '0'), lines[i]);
-      }
-      $('blocks').value = '';
-      say(`Saved ${lines.length} block(s).`, false);
-      await load();
-    } catch (err) {
-      say(err.message, true);
-    } finally {
-      $('save').disabled = false;
-    }
-  });
-
-  load();
+  fetch(FAUCET + '/api/status').then(r => r.json()).then(s => {
+    $('status').textContent = s.ready_bundles + ' bundles ready · ' + s.claims_served + ' claims served since restart';
+  }).catch(() => {});
 })();
 </script>
