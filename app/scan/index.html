@@ -1,0 +1,65 @@
+<!doctype html>
+<!--
+  Marigold — the scanner.
+  =======================
+
+  Opened from the "Scan a code" button in a person's own wallet bot. It asks
+  Telegram for the camera, reads a Marigold code (marigoldpay:, marigoldnote:
+  or marigoldreq:), and hands it straight back to the bot with sendData,
+  which closes this page. Nothing is stored, nothing is sent anywhere but to
+  the bot that opened it. Without a camera, the code can be pasted instead.
+-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Marigold — scan</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root{ --ink:#141f19; --gold:#e4a33d; --amber:#c9761f; --cream:#efe7d3; --moss:#9aa894; --bad:#b3402f; }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--cream); color:var(--ink); font-family:Georgia,serif; padding:1.4rem 1.1rem 3rem}
+  main{max-width:30rem; margin:0 auto}
+  .kicker{font-family:ui-monospace,Menlo,monospace; font-size:.64rem; letter-spacing:.22em; text-transform:uppercase; color:var(--amber)}
+  h1{font-size:1.5rem; font-weight:400; margin:.3rem 0 1rem}
+  p{line-height:1.5; color:#3d4a42}
+  textarea{width:100%; min-height:7rem; font-family:ui-monospace,Menlo,monospace; font-size:.8rem; padding:.7rem; border:1px solid #d8cfb8; border-radius:10px; background:#fff; word-break:break-all}
+  button{width:100%; margin-top:.8rem; padding:.85rem 1rem; border-radius:10px; font-family:ui-monospace,Menlo,monospace; font-size:.78rem; letter-spacing:.1em; text-transform:uppercase; background:var(--gold); color:#18291f; border:1px solid var(--amber)}
+  button.quiet{background:transparent; color:#4a5c52; border-color:#d8cfb8}
+  .msg{margin-top:1rem; padding:.7rem .9rem; border-radius:10px; background:#f7e2de; color:var(--bad); font-size:.88rem}
+  [hidden]{display:none!important}
+</style>
+<main>
+  <div class="kicker">Marigold</div>
+  <h1>Scan a code</h1>
+  <p id="lead">Point the camera at a Marigold code. It goes straight to your wallet.</p>
+  <button id="scan">Open the camera</button>
+  <p>Or paste it:</p>
+  <textarea id="code" autocapitalize="off" spellcheck="false" placeholder="marigoldpay:… / marigoldnote:… / marigoldreq:…"></textarea>
+  <button class="quiet" id="send">Send to my wallet</button>
+  <div id="msg" class="msg" hidden></div>
+</main>
+<script>
+(function () {
+  const tg = window.Telegram && window.Telegram.WebApp;
+  if (tg) { tg.ready(); tg.expand(); }
+  const $ = (id) => document.getElementById(id);
+  const isCode = (t) => /^marigold(pay|note|req):/.test(t);
+  function fail(text) { const m = $('msg'); m.textContent = text; m.hidden = false; }
+  function handOver(text) {
+    text = (text || '').trim();
+    if (!isCode(text)) { fail('That is not a Marigold code.'); return false; }
+    if (!tg || !tg.sendData) { fail('Open this from your wallet bot in Telegram; that is where the code goes.'); return false; }
+    tg.sendData(text);   // closes the page; the bot gets the code
+    return true;
+  }
+  $('scan').addEventListener('click', () => {
+    if (!tg || !tg.showScanQrPopup) { fail('No camera here. Paste the code instead.'); return; }
+    tg.showScanQrPopup({ text: 'A Marigold code' }, (text) => {
+      if (isCode((text || '').trim())) { tg.closeScanQrPopup(); handOver(text); return true; }
+      return false;   // keep scanning
+    });
+  });
+  $('send').addEventListener('click', () => handOver($('code').value));
+  if (tg && tg.showScanQrPopup) { $('scan').click(); }
+})();
+</script>
