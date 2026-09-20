@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Marigold — digital cash in fixed notes</title>
-<meta name="description" content="Marigold is digital cash in fixed notes of 1, 10, 100 and 1,000. Public testnet open. No token sale.">
+<meta name="description" content="Marigold is digital cash in fixed notes of 1, 10, 100 and 1,000. The public testnet is open: get the wallet, take notes from the faucet, pay and be paid, mine with spare CPU. No token sale.">
 <meta property="og:title" content="Marigold — digital cash in fixed notes">
-<meta property="og:description" content="Notes you hold, hand over, and understand. The public testnet is open.">
+<meta property="og:description" content="Digital cash in fixed notes of 1, 10, 100 and 1,000. The testnet is open to try.">
 <meta property="og:url" content="https://marigold.cash">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23141f19'/%3E%3Ccircle cx='32' cy='32' r='17' fill='%23E4A33D'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%237A4212'/%3E%3C/svg%3E">
@@ -25,18 +25,19 @@
     --moss:#9aa894;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  html,body{height:100%}
   body{
-    background:var(--ink);
-    color:var(--cream);
+    background:var(--cream);
+    color:var(--ink);
     font-family:"Fraunces",serif;
+    font-weight:300;
+    line-height:1.6;
+  }
+  .sky{
+    background:var(--ink);
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:center;
-    gap:1.6rem;
-    min-height:100vh;
-    padding:2rem 1rem;
+    padding:2.6rem 1rem 3.2rem;
   }
 
   /* ---------- the note ---------- */
@@ -196,8 +197,6 @@
     color:rgba(154,168,148,.75);
     text-align:center;
     line-height:2;
-    max-width:44em;
-    padding:0 1rem;
     opacity:0;
     animation:settle .8s ease .8s forwards;
   }
@@ -214,11 +213,88 @@
   @media (prefers-reduced-motion:reduce){
     .note,.rosette,footer{animation:none;opacity:1;transform:none}
   }
+
+  /* ---------- the page under the note ---------- */
+  .page{max-width:62rem;margin:0 auto;padding:0 1.2rem 4rem}
+  .lede{
+    max-width:40em;margin:3rem auto 2.4rem;text-align:center;
+    font-size:clamp(1.15rem,2.4vw,1.4rem);line-height:1.55;color:#2f3d35;
+  }
+  .lede strong{font-weight:500;color:var(--ink)}
+  .kicker{
+    font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--amber);margin:0 0 .5rem;
+  }
+  h2{font-size:clamp(1.5rem,3vw,2rem);font-weight:400;margin:0 0 .9rem;letter-spacing:.01em}
+  section{margin-top:3.4rem;scroll-margin-top:1.5rem}
+  .steps{
+    counter-reset:step;
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:1.1rem;
+  }
+  .step{
+    counter-increment:step;
+    background:#fff;border:1px solid #d8cfb8;border-radius:14px;padding:1.3rem 1.3rem 1.2rem;
+    box-shadow:0 18px 40px -30px rgba(20,31,25,.5);
+    display:flex;flex-direction:column;gap:.6rem;
+  }
+  .step::before{
+    content:counter(step,decimal-leading-zero);
+    font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.2em;color:var(--amber);
+  }
+  .step h3{font-size:1.15rem;font-weight:500;margin:0}
+  .step p{margin:0;color:#3d4a42;font-size:.98rem}
+  .step .cta{margin-top:auto;padding-top:.6rem}
+  pre{
+    font-family:"IBM Plex Mono",monospace;font-size:.82rem;line-height:1.55;
+    background:var(--note);color:var(--petal);border-radius:10px;padding:.9rem 1rem;
+    overflow-x:auto;margin:.3rem 0 0;
+  }
+  code{font-family:"IBM Plex Mono",monospace;font-size:.88em;background:#e5dcc4;border-radius:4px;padding:1px 5px}
+  pre code{background:none;padding:0;font-size:1em}
+  a{color:var(--amber)}
+  a:hover{color:#8a4c12}
+  .btn{
+    display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:.76rem;letter-spacing:.12em;
+    text-transform:uppercase;text-decoration:none;color:var(--note);background:var(--gold);
+    border:1px solid var(--amber);border-radius:10px;padding:.7rem 1rem;
+  }
+  .btn:hover{background:#f0b45a;color:var(--note)}
+  .btn.quiet{background:transparent;color:#4a5c52;border-color:#c9bfa4}
+  .btn.quiet:hover{color:var(--ink);border-color:var(--amber)}
+  .row{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center}
+  .papers{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1.1rem}
+  .paper{
+    display:block;text-decoration:none;color:inherit;
+    background:var(--note);border:1px solid rgba(228,163,61,.45);border-radius:14px;padding:1.4rem 1.4rem 1.3rem;
+    position:relative;overflow:hidden;
+  }
+  .paper::before{content:"";position:absolute;inset:8px;border:1px solid rgba(228,163,61,.25);border-radius:9px;pointer-events:none}
+  .paper .kicker{color:var(--gold)}
+  .paper h3{color:var(--cream);font-weight:400;font-size:1.3rem;margin:0 0 .4rem}
+  .paper p{color:var(--moss);margin:0;font-size:.95rem}
+  .paper:hover{border-color:var(--gold)}
+  .facts{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:1rem;
+    font-family:"IBM Plex Mono",monospace;font-size:.78rem;letter-spacing:.04em;
+  }
+  .facts div{border-top:2px solid var(--gold);padding-top:.6rem;color:#3d4a42}
+  .facts b{display:block;font-size:1.25rem;font-weight:500;color:var(--ink);letter-spacing:0;font-family:"Fraunces",serif}
+  .note-of-caution{
+    margin-top:3.4rem;border-left:3px solid var(--gold);padding:.2rem 0 .2rem 1.1rem;color:#3d4a42;max-width:44em;
+  }
+  .foot{
+    margin-top:4rem;padding-top:1.4rem;border-top:1px solid rgba(154,168,148,.4);
+    font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.1em;color:rgba(61,74,66,.8);
+    display:flex;flex-wrap:wrap;justify-content:space-between;gap:.6rem;
+  }
+  .foot a{color:inherit}
+  @media (prefers-reduced-motion:reduce){.note,.rosette{animation:none;opacity:1;transform:none}}
 </style>
 </head>
 <body>
 
-  <main class="note" aria-label="Marigold specimen note">
+<div class="sky">
+  <header class="note" aria-label="Marigold specimen note">
     <div class="micro top" aria-hidden="true">marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash</div>
 
     <span class="corner tl" aria-hidden="true">1</span>
@@ -284,10 +360,10 @@
 
       <div class="divider" aria-hidden="true"></div>
 
-      <p class="status"><a href="/www/">Public testnet · open</a></p>
+      <p class="status"><a href="#start">Public testnet · open</a></p>
 
       <nav class="ways" aria-label="Ways in">
-        <a class="take" href="/www/">Take a note</a>
+        <a class="take" href="#start">Take a note</a>
         <a href="https://github.com/marigoldcash/marigold-wallet#readme">Wallet</a>
         <a href="/litepaper/">Litepaper</a>
         <a href="/whitepaper/">Whitepaper</a>
@@ -301,12 +377,107 @@
     </div>
 
     <div class="micro bottom" aria-hidden="true">marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash</div>
-  </main>
+  </header>
+</div>
 
-  <footer>
-    No token sale. No presale. Nothing to buy.<br>
-    The testnet is open; its notes are for testing and worth nothing. When there is something real, it will be here.
+<main class="page">
+
+  <p class="lede"><strong>Marigold is digital cash in fixed notes.</strong> A note of 1, 10, 100 or 1,000 is yours when you hold its key, changes hands as a code, and never sits in an account. The testnet is open: take some from the faucet, pay a friend, be paid back, mine a few with spare CPU, and tell us what broke.</p>
+
+  <section id="start">
+    <p class="kicker">Three steps</p>
+    <h2>From nothing to a wallet with money in it</h2>
+    <div class="steps">
+      <div class="step">
+        <h3>Get the wallet</h3>
+        <p>One binary, no install. Linux, macOS and Windows, or the Docker image if you would rather not run a downloaded program.</p>
+<pre><code>mkdir -p ~/.marigold
+curl -fsSLO https://raw.githubusercontent.com/marigoldcash/marigold-wallet/main/docker-compose.yml
+docker compose run --rm wallet</code></pre>
+        <div class="cta row">
+          <a class="btn" href="https://github.com/marigoldcash/marigold-wallet/releases/latest">Binaries</a>
+          <a class="btn quiet" href="https://github.com/marigoldcash/marigold-wallet#readme">Docker guide</a>
+        </div>
+      </div>
+      <div class="step">
+        <h3>Make a wallet, connect</h3>
+        <p>Type <code>create</code>, give it a name and a password, then <code>connect</code>. It syncs a copy of the network on your machine so nobody sees which notes are yours; say yes to a public computer if you cannot wait.</p>
+<pre><code>› create
+› connect
+› guide</code></pre>
+        <div class="cta row"><span style="font-size:.85rem;color:#4a5c52"><code>guide</code> reads your wallet and tells you only what applies.</span></div>
+      </div>
+      <div class="step">
+        <h3>Take a note</h3>
+        <p>The faucet hands out three real bearer notes, 10, 1 and 0.1, once an hour. Paste each code into your wallet with <code>receive</code>, the big one first, and it is yours alone.</p>
+<pre><code>› receive marigoldnote:…
+› balance</code></pre>
+        <div class="cta row">
+          <a class="btn" href="https://faucet.marigold.cash">The faucet</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="try">
+    <p class="kicker">Then</p>
+    <h2>Things worth trying</h2>
+    <div class="steps" style="grid-template-columns:repeat(auto-fit,minmax(20rem,1fr))">
+      <div class="step">
+        <h3>Pay someone</h3>
+        <p><code>pay 5</code> prints a code and a QR. Whoever you give it to types <code>receive</code> and the code; the notes are theirs the moment it lands, and nobody, you included, can spend them after.</p>
+      </div>
+      <div class="step">
+        <h3>Be paid while you are away</h3>
+        <p><code>receive key</code> makes a key of yours to hand out. A payment to it is locked: the sender cannot touch it, only you can take it, and if you never do it goes back to them by itself.</p>
+      </div>
+      <div class="step">
+        <h3>Mine with spare CPU</h3>
+        <p><code>mine start</code> in a wallet that syncs its own copy, or <code>marigold-cli mine-to &lt;address&gt; 50</code> as a service. The threads run at the lowest priority the machine has; you will not feel them.</p>
+      </div>
+      <div class="step">
+        <h3>Your phone</h3>
+        <p>Make a Telegram bot of your own, pair it with <code>mobile telegram</code>, and your wallet answers it: balance, pay, receive, a QR to scan. The keys never leave your machine.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="papers">
+    <p class="kicker">Read</p>
+    <h2>Why notes, and how they hold up</h2>
+    <div class="papers">
+      <a class="paper" href="/litepaper/">
+        <p class="kicker">Litepaper</p>
+        <h3>Notes you hold, hand over, and understand</h3>
+        <p>The idea in an evening's read: fixed denominations, bearer keys, a chain that stays auditable.</p>
+      </a>
+      <a class="paper" href="/whitepaper/">
+        <p class="kicker">Whitepaper</p>
+        <h3>The note pool, in full</h3>
+        <p>Consensus rules, the pool commitment, signatures, fees, and what the design deliberately does not promise.</p>
+      </a>
+    </div>
+  </section>
+
+  <section id="facts">
+    <p class="kicker">The testnet</p>
+    <h2>What you are joining</h2>
+    <div class="facts">
+      <div><b>testnet-10</b>the network id; testnet money is worthless by design</div>
+      <div><b>10 blocks/s</b>a Kaspa-style blockDAG underneath, kHeavyHash</div>
+      <div><b>0.01 to 100,000</b>eight note sizes, tens of each other</div>
+      <div><b>reset without notice</b>it is a testnet; keep nothing you would miss</div>
+    </div>
+  </section>
+
+  <p class="note-of-caution">Marigold is in development. There is no token sale, no presale, and nothing to buy. If someone offers you Marigold for money before the network launches, they are not us.</p>
+
+  <footer class="foot">
+    <span>marigold.cash</span>
+    <span><a href="https://github.com/marigoldcash">github.com/marigoldcash</a></span>
+    <span><a href="/faq/">FAQ</a></span>
   </footer>
 
+</main>
 </body>
 </html>
