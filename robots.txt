@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /app/
+Disallow: /www/
+
+Sitemap: https://marigold.cash/sitemap.xml
