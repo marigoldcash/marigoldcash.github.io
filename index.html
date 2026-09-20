@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Marigold — digital cash in fixed notes</title>
-<meta name="description" content="Marigold is digital cash in fixed notes of 1, 10, 100 and 1,000. In development. No token sale.">
+<meta name="description" content="Marigold is digital cash in fixed notes of 1, 10, 100 and 1,000. Public testnet open. No token sale.">
 <meta property="og:title" content="Marigold — digital cash in fixed notes">
-<meta property="og:description" content="Notes you hold, hand over, and understand. In development.">
+<meta property="og:description" content="Notes you hold, hand over, and understand. The public testnet is open.">
 <meta property="og:url" content="https://marigold.cash">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23141f19'/%3E%3Ccircle cx='32' cy='32' r='17' fill='%23E4A33D'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%237A4212'/%3E%3C/svg%3E">
@@ -145,6 +145,36 @@
     text-transform:uppercase;
     color:var(--gold);
   }
+  .status a{
+    color:var(--gold);
+    text-decoration:none;
+    border-bottom:1px solid rgba(228,163,61,.45);
+    padding-bottom:.15em;
+  }
+  .status a:hover,.status a:focus-visible{border-bottom-color:var(--gold);outline:none}
+
+  /* ways in: the invitation, and the reading behind it */
+  .ways{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:.6rem .9rem;
+    margin-top:.2rem;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.68rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+  }
+  .ways a{
+    color:rgba(239,231,211,.7);
+    text-decoration:none;
+    padding:.45em .9em;
+    border:1px solid rgba(228,163,61,.28);
+    transition:color .2s,border-color .2s;
+  }
+  .ways a:hover,.ways a:focus-visible{color:var(--petal);border-color:rgba(228,163,61,.7);outline:none}
+  .ways a.take{color:var(--ink);background:var(--gold);border-color:var(--gold);font-weight:500}
+  .ways a.take:hover,.ways a.take:focus-visible{background:var(--petal);border-color:var(--petal);color:var(--ink)}
 
   /* serial row */
   .serial-row{
@@ -166,6 +196,8 @@
     color:rgba(154,168,148,.75);
     text-align:center;
     line-height:2;
+    max-width:44em;
+    padding:0 1rem;
     opacity:0;
     animation:settle .8s ease .8s forwards;
   }
@@ -252,7 +284,15 @@
 
       <div class="divider" aria-hidden="true"></div>
 
-      <p class="status">In development</p>
+      <p class="status"><a href="/www/">Public testnet · open</a></p>
+
+      <nav class="ways" aria-label="Ways in">
+        <a class="take" href="/www/">Take a note</a>
+        <a href="https://github.com/marigoldcash/marigold-wallet#readme">Wallet</a>
+        <a href="/litepaper/">Litepaper</a>
+        <a href="/whitepaper/">Whitepaper</a>
+        <a href="/faq/">Questions</a>
+      </nav>
     </div>
 
     <div class="serial-row" aria-hidden="true">
@@ -264,8 +304,8 @@
   </main>
 
   <footer>
-    No token sale. No presale. Nothing to buy yet.<br>
-    When there is something real, it will be here.
+    No token sale. No presale. Nothing to buy.<br>
+    The testnet is open; its notes are for testing and worth nothing. When there is something real, it will be here.
   </footer>
 
 </body>
