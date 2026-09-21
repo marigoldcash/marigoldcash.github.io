@@ -368,6 +368,7 @@
         <a href="/litepaper/">Litepaper</a>
         <a href="/whitepaper/">Whitepaper</a>
         <a href="/faq/">Questions</a>
+        <a href="#companies">Companies</a>
       </nav>
     </div>
 
@@ -457,6 +458,29 @@ docker compose run --rm wallet</code></pre>
         <p>Consensus rules, the pool commitment, signatures, fees, and what the design deliberately does not promise.</p>
       </a>
     </div>
+  </section>
+
+  <section id="companies">
+    <p class="kicker">For companies</p>
+    <h2>Anchor your records on the chain</h2>
+    <p>A company that signs attendance sheets, contracts or reports can prove, years later, that a record existed on a given day and has not changed since. Marigold gives it a lane of its own on the chain, and a way to verify that needs no trust in anyone, us included.</p>
+    <div class="steps">
+      <div class="step">
+        <h3>What it does for you</h3>
+        <p>Hash a batch of records into a Merkle tree and put the root on the chain in one transaction, in your lane. Each customer gets their record, its inclusion proof and the transaction id. That is the whole integration: one small transaction a batch, no coins held by your customers, nothing of the records themselves on the chain.</p>
+      </div>
+      <div class="step">
+        <h3>What verification takes</h3>
+        <p>Hash the record, walk the proof to the root, fetch the transaction from any archival node, check the payload carries that root and the lane is yours, read the block's time. No company, no gateway and no marigold.cash is involved, and the encoding is published so anyone can write the check in an afternoon.</p>
+        <div class="cta row"><a class="btn quiet" href="https://github.com/marigoldcash/marigold/blob/main/docs/marigold/LANE-REGISTRY.md">The registry, in full</a><a class="btn quiet" href="https://github.com/marigoldcash/marigold/blob/main/docs/marigold/ANCHORING-GATEWAY.md">The gateway contract</a></div>
+      </div>
+      <div class="step">
+        <h3>Claim a lane, fund an account</h3>
+        <p>A lane is a four-letter tag, claimed on the chain with one transaction that pays the registration fee to the registry: <code>lane claim ACME &lt;your key&gt; "Acme Ltd"</code> in the wallet, 100 MAGLD, once. The first valid claim of a tag holds it. If you would rather not run an archival node, ours answers verification calls: 10 MAGLD a month per lane and 0.01 a call, from a balance you top up in marigold.</p>
+        <p><strong>The chain takes nothing.</strong> Every fee on the chain goes to miners. What the verification service charges is what marigold.cash charges for a service it runs, and it pays for the archive and for the people who build the software.</p>
+      </div>
+    </div>
+    <p class="note-of-caution" style="margin-top:2rem">Claims can be made on the testnet today. The verification service opens with the anchoring gateway; until then, verify against any archival node, ours included, for nothing.</p>
   </section>
 
   <section id="facts">
