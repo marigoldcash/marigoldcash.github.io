@@ -466,15 +466,8 @@ docker compose run --rm wallet</code></pre>
     <p class="kicker">For companies</p>
     <h2>Prove your records were there</h2>
     <p>If your business signs contracts, attendance sheets, invoices or reports, you will one day have to prove that a particular record existed on a particular day and has not been altered since. Marigold gives you a place on the chain to make that proof, and a way to check it that depends on nobody, us included.</p>
+    <p>That place is a <strong>lane</strong>: your company's own corner of the chain, a four-letter tag, like a ticker symbol, that every entry you make carries. Anyone looking for your records finds them by that tag, and nobody else can make entries under it. You claim a lane once, with a single transaction from the Marigold wallet — <code>lane claim ACME &lt;your company's key&gt; "Acme Ltd"</code> — for 100 MAGLD paid to the registry. The first valid claim of a tag holds it. The claim is recorded on the chain itself, so there is no form to fill, no account with us, and no one who can take it away; keep the transaction number the wallet gives you, it is your proof of ownership. <em>On the testnet today</em> you can claim a lane right away with test coins from the faucet, to learn the procedure and build your integration; testnet money is worth nothing and the testnet may be reset before launch, so you claim your real lane again at launch, on the main network.</p>
     <div class="steps">
-      <div class="step">
-        <h3>Your lane</h3>
-        <p>A lane is your company's own corner of the chain: a four-letter tag, like a ticker symbol, that every entry you make carries. Anyone looking for your records finds them by that tag, and nobody else can make entries under it.</p>
-        <p>You claim a lane once, with a single transaction from the Marigold wallet:</p>
-        <pre><code>lane claim ACME &lt;your company's key&gt; "Acme Ltd"</code></pre>
-        <p>It costs 100 MAGLD, paid to the registry, and the first valid claim of a tag holds it. The claim is recorded on the chain itself, so there is no form to fill, no account with us, and no one who can take it away. Keep the transaction number the wallet gives you: it is your proof of ownership.</p>
-        <p><em>On the testnet today:</em> claim a lane right away, exactly as above, with test coins from the faucet. Testnet money is worth nothing and the testnet may be reset before launch, so a testnet lane is for learning the procedure and building your integration; you claim your real lane again at launch, on the main network.</p>
-      </div>
       <div class="step">
         <h3>What it does for you</h3>
         <p>Every digital file has a fingerprint: a short string of letters and numbers (a <em>hash</em>) that a computer works out from the file's contents. Change one character in the file and the fingerprint changes completely. It cannot be turned back into the file, so it gives nothing away.</p>
