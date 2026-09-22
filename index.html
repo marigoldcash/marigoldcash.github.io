@@ -244,6 +244,8 @@
   .step h3{font-size:1.15rem;font-weight:500;margin:0}
   .step p{margin:0;color:#3d4a42;font-size:.98rem}
   .step .cta{margin-top:auto;padding-top:.6rem}
+  .step ol{margin:0;padding-left:1.2rem;color:#3d4a42;font-size:.98rem;display:flex;flex-direction:column;gap:.4rem}
+  .step em{font-style:italic;color:var(--ink)}
   pre{
     font-family:"IBM Plex Mono",monospace;font-size:.82rem;line-height:1.55;
     background:var(--note);color:var(--petal);border-radius:10px;padding:.9rem 1rem;
@@ -462,25 +464,43 @@ docker compose run --rm wallet</code></pre>
 
   <section id="companies">
     <p class="kicker">For companies</p>
-    <h2>Anchor your records on the chain</h2>
-    <p>A company that signs attendance sheets, contracts or reports can prove, years later, that a record existed on a given day and has not changed since. Marigold gives it a lane of its own on the chain, and a way to verify that needs no trust in anyone, us included.</p>
+    <h2>Prove your records were there</h2>
+    <p>If your business signs contracts, attendance sheets, invoices or reports, you will one day have to prove that a particular record existed on a particular day and has not been altered since. Marigold gives you a place on the chain to make that proof, and a way to check it that depends on nobody, us included.</p>
     <div class="steps">
       <div class="step">
+        <h3>Your lane</h3>
+        <p>A lane is your company's own corner of the chain: a four-letter tag, like a ticker symbol, that every entry you make carries. Anyone looking for your records finds them by that tag, and nobody else can make entries under it.</p>
+        <p>You claim a lane once, with a single transaction from the Marigold wallet:</p>
+        <pre><code>lane claim ACME &lt;your company's key&gt; "Acme Ltd"</code></pre>
+        <p>It costs 100 MAGLD, paid to the registry, and the first valid claim of a tag holds it. The claim is recorded on the chain itself, so there is no form to fill, no account with us, and no one who can take it away. Keep the transaction number the wallet gives you: it is your proof of ownership.</p>
+        <p><em>On the testnet today:</em> claim a lane right away, exactly as above, with test coins from the faucet. Testnet money is worth nothing and the testnet may be reset before launch, so a testnet lane is for learning the procedure and building your integration; you claim your real lane again at launch, on the main network.</p>
+      </div>
+      <div class="step">
         <h3>What it does for you</h3>
-        <p>Hash a batch of records into a Merkle tree and put the root on the chain in one transaction, in your lane. Each customer gets their record, its inclusion proof and the transaction id. That is the whole integration: one small transaction a batch, no coins held by your customers, nothing of the records themselves on the chain.</p>
+        <p>Every digital file has a fingerprint: a short string of letters and numbers (a <em>hash</em>) that a computer works out from the file's contents. Change one character in the file and the fingerprint changes completely. It cannot be turned back into the file, so it gives nothing away.</p>
+        <p>Anchoring a record means putting its fingerprint on the chain, in your lane, in one small transaction. From that moment the chain holds a timestamped statement that a file with exactly that fingerprint existed. To anchor many records at once, a standard technique (a <em>Merkle tree</em>) combines all their fingerprints into one, so a whole month of signed documents costs one transaction. Each customer receives their record, a short <em>inclusion proof</em> that ties it to that combined fingerprint, and the transaction number.</p>
+        <p>That is the whole integration: one transaction per batch, nothing of the records themselves on the chain, and no coins in your customers' hands. The only thing your system needs is a small amount of MAGLD to pay the transaction fees.</p>
       </div>
       <div class="step">
         <h3>What verification takes</h3>
-        <p>Hash the record, walk the proof to the root, fetch the transaction from any archival node, check the payload carries that root and the lane is yours, read the block's time. No company, no gateway and no marigold.cash is involved, and the encoding is published so anyone can write the check in an afternoon.</p>
-        <div class="cta row"><a class="btn quiet" href="https://github.com/marigoldcash/marigold/blob/main/docs/marigold/LANE-REGISTRY.md">The registry, in full</a><a class="btn quiet" href="https://github.com/marigoldcash/marigold/blob/main/docs/marigold/ANCHORING-GATEWAY.md">The gateway contract</a></div>
+        <p>Years later, anyone holding a record and its proof can check it without asking you, us, or anyone:</p>
+        <ol>
+          <li>Work out the record's fingerprint again.</li>
+          <li>The proof is a short list of neighbouring fingerprints from the same batch. Combine yours with them, in the order the proof gives, and you arrive at the batch's combined fingerprint. If the record had changed by even one character, this step gives a different answer.</li>
+          <li>Look up the transaction, by its number or by searching your lane, on an <em>archival node</em>: a copy of the chain that keeps the full history instead of pruning old entries.</li>
+          <li>Check the transaction carries that combined fingerprint, and read the time of the block that holds it. That time is the attestation.</li>
+        </ol>
+        <p>The encoding is published in full, so a developer can write both the anchoring and the checking side in an afternoon, in any language.</p>
+        <div class="cta row"><a class="btn quiet" href="https://github.com/marigoldcash/marigold/blob/main/docs/marigold/LANE-REGISTRY.md">The registry, in full</a><a class="btn quiet" href="https://github.com/marigoldcash/marigold/blob/main/docs/marigold/ANCHORING-GATEWAY.md">The encoding</a></div>
       </div>
       <div class="step">
-        <h3>Claim a lane, fund an account</h3>
-        <p>A lane is a four-letter tag, claimed on the chain with one transaction that pays the registration fee to the registry: <code>lane claim ACME &lt;your key&gt; "Acme Ltd"</code> in the wallet, 100 MAGLD, once. The first valid claim of a tag holds it. If you would rather not run an archival node, ours answers verification calls: 10 MAGLD a month per lane and 0.01 a call, from a balance you top up in marigold.</p>
-        <p><strong>The chain takes nothing.</strong> Every fee on the chain goes to miners. What the verification service charges is what marigold.cash charges for a service it runs, and it pays for the archive and for the people who build the software.</p>
+        <h3>Verification as a service</h3>
+        <p>Checking against an archival node is free, and you may run your own. If you would rather not, marigold.cash runs one and answers verification calls over a simple web interface: is this fingerprint anchored, in which block, at what time.</p>
+        <p>10 MAGLD a month per lane, which keeps the archive running whether or not anyone verifies. 0.01 MAGLD per verification call. Both are drawn from a balance you top up in marigold, and shown on your lane's page.</p>
+        <p><strong>The chain takes nothing.</strong> Every fee paid on the chain goes to the miners who secure it. What the verification service charges is what marigold.cash charges for a service it runs, the way any host charges for hosting, and it pays for the archive and for the people who build the software. Your records, your lane and your proofs never depend on that service: if it vanished tomorrow, every check above still works against any archival node.</p>
       </div>
     </div>
-    <p class="note-of-caution" style="margin-top:2rem">Claims can be made on the testnet today. The verification service opens with the anchoring gateway; until then, verify against any archival node, ours included, for nothing.</p>
+    <p class="note-of-caution" style="margin-top:2rem">The verification service opens with the anchoring gateway. Until then, verify against any archival node, ours included, for nothing.</p>
   </section>
 
   <section id="facts">
