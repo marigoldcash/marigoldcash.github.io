@@ -1,0 +1,28 @@
+{
+  "latest": "2.58.255",
+  "notices": [
+    {
+      "network": "testnet-10",
+      "min_version": "2.56",
+      "issued_at": 1790080318,
+      "signatures": [
+        {
+          "trustee": 0,
+          "signature": "bea92dbcae6f5ba1724085250225eef907d7a3ea5fc16e5712438a94126b0459d3cf63dfe0916684b43e44eabb6dc3825c5f883eab2125ddb804bcca9f84b25e"
+        },
+        {
+          "trustee": 1,
+          "signature": "649d8c502de4eb24d05c7986737131dbc80d7f3132bcacec491b342376387882f6e339647bd773660724f73fbe5222bd463ae751ac18a7e4775446485a894c16"
+        },
+        {
+          "trustee": 2,
+          "signature": "dd9bc66260883b52a64854198b94c3edc41805a867e3b2eea7a2d9a7643098ff7123fd76b64f103097365b8707955fc16fbdad2bc50d9464b99f060be10598d3"
+        },
+        {
+          "trustee": 3,
+          "signature": "fc83946fc5814eb205f0b1fbe02c1e6b4c7448434b5572fe83cb77bb4ea01d89c830870e1cd58761d6aa632ecaad5fd2f678cde4c3cccc0b1d75e1cc95ca53e2"
+        }
+      ]
+    }
+  ]
+}
