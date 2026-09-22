@@ -485,8 +485,7 @@ docker compose run --rm wallet</code></pre>
         <h3>What verification takes</h3>
         <p>Years later, anyone holding a record and its proof can check it without asking you, us, or anyone:</p>
         <ol>
-          <li>Work out the record's fingerprint again.</li>
-          <li>The proof is a short list of neighbouring fingerprints from the same batch. Combine yours with them, in the order the proof gives, and you arrive at the batch's combined fingerprint. If the record had changed by even one character, this step gives a different answer.</li>
+          <li>Work out the record's fingerprint again. If it was part of a set of records, you need to walk back the Merkle tree; our software takes care of that.</li>
           <li>Look up the transaction, by its number or by searching your lane, on an <em>archival node</em>: a copy of the chain that keeps the full history instead of pruning old entries.</li>
           <li>Check the transaction carries that combined fingerprint, and read the time of the block that holds it. That time is the attestation.</li>
         </ol>
