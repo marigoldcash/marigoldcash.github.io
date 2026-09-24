@@ -138,8 +138,9 @@
     <p>They are gone. This is the part of bearer money that has no soft edge:
     there is no recovery, no support line, no way to reverse it, exactly as with
     a banknote you drop in the street.</p>
-    <p>So back up your note vault — see the next answer, and please read it
-    rather than assuming it works the way other wallets do. It does not.</p>
+    <p>So keep a backup — the wallet can keep one for you, see the answers
+    below — and please read them rather than assuming it works the way other
+    wallets do. It does not.</p>
   </details>
 
   <details id="words-are-not-a-backup">
@@ -158,10 +159,10 @@
 
     <table>
       <tr><th>What you have</th><th>What you can recover</th></tr>
-      <tr><td>Vault files + your wallet password</td><td>Everything</td></tr>
-      <tr><td>Vault files + the 24 words</td><td>Everything, even if the password is forgotten</td></tr>
+      <tr><td>A backup + the 24 words</td><td>Everything</td></tr>
+      <tr><td>A backup + your wallet password</td><td><strong>Nothing.</strong> A backup never opens with the password (see the next answer)</td></tr>
       <tr><td>The 24 words alone</td><td><strong>Nothing.</strong> A key to a vault that is not there</td></tr>
-      <tr><td>Vault files alone, no password, no words</td><td><strong>Nothing.</strong> A vault nothing opens</td></tr>
+      <tr><td>A backup alone, no words</td><td><strong>Nothing.</strong> A vault nothing opens</td></tr>
     </table>
 
     <p>So you need <strong>both</strong>, and they should not share a fate. Keep
@@ -169,10 +170,35 @@
     with it, and keep the words somewhere separate — a fire that reaches one
     should not reach the other.</p>
 
-    <p>In the wallet, <code>note vault backup &lt;folder&gt;</code> writes the
-    files and <code>note vault verify &lt;folder&gt;</code> checks a copy is
-    readable. Restoring takes both: <code>note vault restore &lt;folder&gt;
-    &lt;24 words&gt;</code>.</p>
+    <p>In the wallet, <code>backup</code> writes the encrypted backup to a file
+    and <code>backup telegram</code> has the wallet keep one current in your
+    Telegram chat by itself. Restoring takes the backup and the words:
+    <code>wallet restore &lt;file&gt;</code> or <code>wallet restore
+    telegram</code>, then the 24 words at the prompt.</p>
+  </details>
+
+  <details id="backup-words-not-password">
+    <summary>Why does a backup open with the 24 words and not with my password?</summary>
+    <p>Because a backup lives on servers you do not control — Telegram, a cloud
+    drive, a USB stick in a drawer — where whoever holds a copy can attack it
+    offline, at leisure, for as long as they like.</p>
+    <p>Your wallet password is something you type every day and chose to be
+    able to remember. That makes it, by construction, not random, and a
+    not-random secret is what an unhurried attacker brute-forces. The 24 words
+    are 256 bits that nobody chose; they cannot be guessed. So every backup the
+    wallet makes — the file from <code>backup</code> and the copies it posts to
+    Telegram — is sealed with a key derived from the words, and the password
+    never opens one.</p>
+    <p>That is why the wallet shows you the words when it is created, explains
+    them, and asks you for two of them by number before it lets you go on. Write
+    them on paper, not in a photo, and keep the paper somewhere a fire that
+    reaches your computer will not reach.</p>
+    <p>The automatic backup, plainly: after you run <code>backup telegram</code>
+    once, the wallet posts an encrypted copy of itself into your bot's chat and
+    keeps it current while it is open — a full copy every week, the changes
+    within minutes of a payment, silently. To restore on a new machine, run
+    <code>wallet restore telegram</code> there, forward the bot everything it
+    posted in the last week, and give the words.</p>
   </details>
 
   <details id="cost-to-pay">
