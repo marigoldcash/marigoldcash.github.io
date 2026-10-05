@@ -245,5 +245,59 @@
     cash stops at the cent for the same reason.</p>
 </details>
 
+  <h2>Your phone and your bot</h2>
+
+  <details id="make-the-bot">
+    <summary>How do I make the Telegram bot, step by step?</summary>
+    <p>Ten minutes, once. You make a bot of your own in Telegram, hand its
+    token to your wallet, and pair the two with a code. From then on your
+    phone is a remote control for the wallet at home, and the bot's chat holds
+    your backup. Nothing of ours is in between.</p>
+    <ol>
+      <li><strong>Open Telegram</strong> on your phone (or the desktop app) and
+      search for <code>BotFather</code>. Pick the one with the blue verified
+      tick, <code>@BotFather</code>. Tap <em>Start</em>.</li>
+      <li>Send it <code>/newbot</code>.</li>
+      <li>It asks for a <strong>name</strong>: anything you like, this is what
+      the chat is called. For example <code>Dom's Marigold</code>. Send it.</li>
+      <li>It asks for a <strong>username</strong>: letters, digits and
+      underscores, it must end in <code>bot</code>, and it has to be one
+      nobody has taken. For example <code>dom_marigold_bot</code>. If
+      BotFather says it is taken, try another. Send it.</li>
+      <li>BotFather answers <em>Done! Congratulations on your new bot</em> and
+      shows a <strong>token</strong>, a line like
+      <code>8012345678:AAHx…</code>. Tap it to copy it. <strong>Treat the
+      token like a password:</strong> whoever has it can talk to your wallet
+      through the bot. Do not paste it in any chat.</li>
+      <li><strong>Give the token to your wallet.</strong> Terminal wallet: with
+      the wallet open, type <code>telegram link</code> followed by a space and
+      the token. Desktop wallet: Backup tab, paste the token into <em>Bot
+      token</em>. Either way the wallet asks for a <strong>PIN</strong>: four
+      digits or more, something you will type on the phone before the bot
+      pays. It is not your wallet password. Type it twice.</li>
+      <li>The wallet shows a line like <code>/start 482913</code>. <strong>Back
+      in Telegram</strong>, open your new bot: tap the link BotFather showed
+      (<code>t.me/dom_marigold_bot</code>) or search for its username. Tap
+      <em>Start</em>, then send it that line, <code>/start 482913</code>,
+      within fifteen minutes. The bot replies <em>Paired</em> and shows its
+      keyboard: Balance, Pay, Request and the rest.</li>
+      <li><strong>Turn on two-step verification in Telegram</strong>: Settings
+      → Privacy and Security → Two-Step Verification. That Telegram account can
+      move money now, and Telegram accounts recover by SMS otherwise.</li>
+      <li>The wallet now asks, once, whether to <strong>back itself up
+      automatically</strong> to the bot's chat — in the terminal at the next
+      <code>open</code>, in the desktop wallet as a banner. Say yes. It posts
+      an encrypted full copy and keeps it current by itself; it opens with
+      your 24 words and nothing else.</li>
+    </ol>
+    <p>Afterwards: <code>telegram</code> in the terminal shows where things
+    stand — who the bot is paired with, the daily limit (<code>telegram limit
+    &lt;amount&gt;</code> changes it), and the state of the backup. The bot
+    answers as long as your wallet is running, in the terminal, in the desktop
+    app, or as a service. If the token ever leaks, send BotFather
+    <code>/revoke</code>, pick the bot, and <code>telegram link</code> again
+    with the new token; the old one stops working at once.</p>
+  </details>
+
   <footer>marigold.cash · <a href="/litepaper/">Litepaper</a></footer>
 </main>
