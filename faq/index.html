@@ -133,6 +133,24 @@
     MAGLD note looks exactly like every other 10 MAGLD note.</p>
   </details>
 
+  <details id="why-serial-numbers">
+    <summary>Why do notes have serial numbers?</summary>
+    <p>A note is a value, a key, and a serial number. The key says who may
+    spend it. The serial says <em>which</em> note it is — and something has to,
+    because one key can hold several notes of the same size, like several
+    ten-dollar bills in the same pocket. Without a serial the system could not
+    tell them apart, could not prove that <em>this</em> note still exists when
+    someone hands it to you, and could not stop a used payment from being
+    replayed against a new note on the same key.</p>
+    <p>The serial is not a number anyone hands out. It is computed from the
+    transaction that created the note, the way a receipt number comes from the
+    till, so there is no counter and no register of serials anywhere. And it
+    does not follow the money: every payment retires the old serial and gives
+    the new note a fresh one, so a note's serial says nothing about where it
+    has been. It is the name of the note for as long as that note exists, and
+    nothing more.</p>
+  </details>
+
   <details id="lost-notes">
     <summary>What happens if I lose my notes?</summary>
     <p>They are gone. This is the part of bearer money that has no soft edge:
