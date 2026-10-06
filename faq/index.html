@@ -190,9 +190,11 @@
 
     <p>In the wallet, <code>backup</code> writes the encrypted backup to a file
     and <code>telegram backup</code> has the wallet keep one current in your
-    Telegram chat by itself. Restoring takes the backup and the words:
+    Telegram chat by itself. Both cover every wallet on your computer, each
+    sealed with its own 24 words. Restoring takes the backup and the words:
     <code>wallet restore &lt;file&gt;</code> or <code>telegram
-    restore</code>, then the 24 words at the prompt.</p>
+    restore</code>, then the 24 words of each wallet you want back at the
+    prompt.</p>
   </details>
 
   <details id="backup-words-not-password">
@@ -205,19 +207,45 @@
     not-random secret is what an unhurried attacker brute-forces. The 24 words
     are 256 bits that nobody chose; they cannot be guessed. So every backup the
     wallet makes — the file from <code>backup</code> and the copies it posts to
-    Telegram — is sealed with a key derived from the words, and the password
-    never opens one.</p>
+    Telegram — is sealed to a key derived from the words, and the password
+    never opens one. Since October 2026 a backup holds every wallet on the
+    computer, and each wallet's part is sealed to a public key its own words
+    name, so each part opens with its own words alone — never with another
+    wallet's.</p>
     <p>That is why the wallet shows you the words when it is created, explains
     them, and asks you for two of them by number before it lets you go on. Write
     them on paper, not in a photo, and keep the paper somewhere a fire that
     reaches your computer will not reach.</p>
     <p>The automatic backup, plainly: after you run <code>telegram backup</code>
-    once, the wallet posts an encrypted copy of itself into your bot's chat and
-    keeps it current while it is open — a full copy every day, the changes
+    once, the wallet posts an encrypted copy of every wallet on the computer
+    into your bot's chat and keeps it current while it is open — a full copy every day, the changes
     within minutes of a payment, silently, only the last two full copies
     kept in the chat. To restore on a new machine, run
     <code>telegram restore</code> there, forward the bot everything from
-    the last dashed line in the chat to the end, and give the words.</p>
+    the last dashed line in the chat to the end, and give the words of the
+    wallet you want back; do it once per wallet.</p>
+  </details>
+
+  <details id="backup-covers-every-wallet">
+    <summary>Does the backup cover all my wallets, or only the one that is open?</summary>
+    <p>All of them, since October 2026. A wallet you put aside and never open
+    is exactly the one a dead disk would take for good, so whichever wallet is
+    open backs up every wallet in the folder: its own files and the others'.</p>
+    <p>Each wallet's part is sealed to a public key that its own 24 words name;
+    the matching private key is never written anywhere, and the public one sits
+    beside the wallet as <code>backup.pub</code>. That is what lets a closed
+    wallet be backed up without its words or its password being around, and it
+    keeps the promise that a wallet's words open that wallet and no other. The
+    backup names its wallets in the clear, so the restore can ask for the right
+    words; what is inside stays sealed.</p>
+    <p>A wallet made before this change has no such key until it is opened once
+    with its password — the wallet says so — or until you type its 24 words
+    once: at <code>open</code> the wallet lists the wallets still waiting,
+    explains why, and asks (Enter skips one for now, <code>never</code> leaves
+    it out; <code>telegram cover</code> asks again). The words are checked
+    against one of that wallet's notes before anything is written. The desktop
+    wallet has the same box on its Backup tab. <code>telegram</code> shows
+    which wallets are covered and which are waiting.</p>
   </details>
 
   <details id="offline-payments">
@@ -325,12 +353,15 @@
     each wallet to the same token with <code>telegram link</code> and the bot
     follows whichever wallet is open. Two wallets open at once with the same
     bot are told so and take turns: a bot has one listener.</p>
-    <p>The one rule is <strong>one chat, one vault</strong>. The bot's private
-    chat belongs to the first wallet that backed up into it. A second wallet
-    is told, when it pairs or when it tries to back up, that it needs a group
-    of its own: make a group, add the bot, then <code>telegram home
-    &lt;group id&gt;</code> in that wallet. Its backups go to that group, the
-    bot answers that wallet there, and the restore stays "forward everything
+    <p>The backups need nothing more: every backup covers every wallet on the
+    computer (see above), so whichever wallet is open keeps the one chat
+    current for all of them. Answering is the one thing kept apart — a
+    payment code in a chat should come from one wallet — so the bot's private
+    chat answers for the wallet that paired first, and a second wallet is told,
+    when it pairs, that the bot can answer it in a group of its own if you want
+    that: make a group, add the bot, then <code>telegram home
+    &lt;group id&gt;</code> in that wallet. The backups then go to that group
+    too, with every wallet in them, and the restore stays "forward everything
     from the last dashed line in this chat". Make the bot an admin of the
     group and it can tidy old copies there at any age.</p>
   </details>
