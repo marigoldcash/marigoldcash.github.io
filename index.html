@@ -271,6 +271,10 @@
   }
   .dl .btn{text-align:center}
   .dl-note{font-size:.82rem;color:#4a5c52;margin:0;min-height:1.2em}
+  .unsigned{border-top:1px solid #e5dcc4;padding-top:.6rem;font-size:.92rem;color:#3d4a42;display:flex;flex-direction:column;gap:.5rem}
+  .unsigned p{margin:0}
+  .unsigned ol{margin:0;padding-left:1.2rem;display:flex;flex-direction:column;gap:.3rem}
+  .shot{width:100%;height:auto;border:1px solid #e5dcc4;border-radius:8px;background:#fff}
   details.fine{border-top:1px solid #e5dcc4;padding-top:.5rem;font-size:.9rem;color:#3d4a42}
   details.fine summary{cursor:pointer;color:var(--ink);font-weight:500}
   details.fine p{margin:.5rem 0 0}
@@ -415,12 +419,59 @@
           <a class="btn" id="dl-btn" href="https://github.com/marigoldcash/marigold-wallet/releases/latest">Download</a>
           <p class="dl-note" id="dl-note"></p>
         </div>
-        <details class="fine">
-          <summary>The first start says the app is unsigned. That is us, not malware.</summary>
-          <p><strong>macOS</strong> says the app "cannot be opened because Apple cannot check it". Click Done, open <em>System Settings → Privacy &amp; Security</em>, scroll down and click <em>Open Anyway</em> next to Marigold, then open it again. Once is enough.</p>
-          <p><strong>Windows</strong> shows a blue "Windows protected your PC" screen. Click <em>More info</em>, then <em>Run anyway</em>. Once is enough.</p>
-          <p>Why: the installers are not yet signed with a paid certificate; the signatures come with the Marigold association. What you install is exactly what our public build made, and from then on the app updates itself after asking you.</p>
-        </details>
+        <div class="unsigned" id="unsigned-mac" hidden>
+          <p><strong>The first time you open it, your Mac will refuse.</strong> That is us, not malware: the app is not yet signed with Apple, and the Mac says so. It happens once.</p>
+          <svg class="shot" viewBox="0 0 320 150" role="img" aria-label="The macOS message: Marigold Not Opened, with the buttons Done and Move to Trash; then System Settings, Privacy and Security, with the button Open Anyway">
+  <rect x="8" y="6" width="150" height="138" rx="10" fill="#f4f4f6" stroke="#c9c9cf"/>
+  <circle cx="83" cy="34" r="14" fill="#fff" stroke="#c9c9cf"/><text x="83" y="39" text-anchor="middle" font-size="14" fill="#e0a21c">!</text>
+  <text x="83" y="62" text-anchor="middle" font-size="8.5" font-weight="700" fill="#1d1d1f">“Marigold” Not Opened</text>
+  <text x="83" y="76" text-anchor="middle" font-size="6.2" fill="#515154">Apple could not verify “Marigold”</text>
+  <text x="83" y="85" text-anchor="middle" font-size="6.2" fill="#515154">is free of malware.</text>
+  <rect x="24" y="100" width="118" height="15" rx="5" fill="#0a7cff"/><text x="83" y="110.5" text-anchor="middle" font-size="7" fill="#fff">Done</text>
+  <rect x="24" y="120" width="118" height="15" rx="5" fill="#fff" stroke="#c9c9cf"/><text x="83" y="130.5" text-anchor="middle" font-size="7" fill="#1d1d1f">Move to Trash</text>
+  <text x="166" y="20" font-size="7" font-weight="700" fill="#1d1d1f">System Settings › Privacy &amp; Security</text>
+  <rect x="166" y="30" width="146" height="110" rx="8" fill="#fff" stroke="#c9c9cf"/>
+  <text x="176" y="50" font-size="6.5" fill="#1d1d1f">Security</text>
+  <line x1="176" y1="58" x2="302" y2="58" stroke="#e5e5ea"/>
+  <text x="176" y="74" font-size="6" fill="#515154">“Marigold” was blocked to</text>
+  <text x="176" y="83" font-size="6" fill="#515154">protect your Mac.</text>
+  <rect x="236" y="92" width="66" height="14" rx="5" fill="#0a7cff"/><text x="269" y="102" text-anchor="middle" font-size="6.5" fill="#fff">Open Anyway</text>
+  <path d="M212 103 L232 99" stroke="#e4a33d" stroke-width="1.6" fill="none"/><circle cx="212" cy="103" r="2.2" fill="#e4a33d"/>
+</svg>
+          <ol>
+            <li>Click <em>Done</em> on the message.</li>
+            <li>Open <em>System Settings</em>, then <em>Privacy &amp; Security</em>, and scroll down.</li>
+            <li>Click <em>Open Anyway</em> next to Marigold, then open Marigold again.</li>
+          </ol>
+        </div>
+        <div class="unsigned" id="unsigned-win" hidden>
+          <p><strong>The first time you start the installer, Windows will show a blue screen.</strong> That is us, not malware: the installer is not yet signed with a certificate, and Windows says so. It happens once.</p>
+          <svg class="shot" viewBox="0 0 320 150" role="img" aria-label="The Windows screen: Windows protected your PC, with the link More info, and then the button Run anyway">
+  <rect x="8" y="6" width="150" height="138" rx="4" fill="#1f6ac2"/>
+  <text x="20" y="30" font-size="9.5" font-weight="700" fill="#fff">Windows protected your PC</text>
+  <text x="20" y="48" font-size="5.8" fill="#eaf1fb">Microsoft Defender SmartScreen prevented an</text>
+  <text x="20" y="57" font-size="5.8" fill="#eaf1fb">unrecognized app from starting. Running this</text>
+  <text x="20" y="66" font-size="5.8" fill="#eaf1fb">app might put your PC at risk.</text>
+  <text x="20" y="84" font-size="6.2" fill="#fff" text-decoration="underline">More info</text>
+  <path d="M60 86 L74 82" stroke="#e4a33d" stroke-width="1.6" fill="none"/><circle cx="60" cy="86" r="2.2" fill="#e4a33d"/>
+  <rect x="100" y="118" width="48" height="16" fill="#dfe6ef"/><text x="124" y="129" text-anchor="middle" font-size="6.5" fill="#1d1d1f">Don't run</text>
+  <rect x="166" y="6" width="150" height="138" rx="4" fill="#1f6ac2"/>
+  <text x="178" y="30" font-size="9.5" font-weight="700" fill="#fff">Windows protected your PC</text>
+  <text x="178" y="48" font-size="5.8" fill="#eaf1fb">App: marigold-wallet.msi</text>
+  <text x="178" y="57" font-size="5.8" fill="#eaf1fb">Publisher: Unknown publisher</text>
+  <rect x="190" y="118" width="54" height="16" fill="#dfe6ef"/><text x="217" y="129" text-anchor="middle" font-size="6.5" fill="#1d1d1f">Run anyway</text>
+  <rect x="252" y="118" width="54" height="16" fill="#dfe6ef"/><text x="279" y="129" text-anchor="middle" font-size="6.5" fill="#1d1d1f">Don't run</text>
+  <path d="M217 106 L217 114" stroke="#e4a33d" stroke-width="1.6" fill="none"/><circle cx="217" cy="104" r="2.2" fill="#e4a33d"/>
+</svg>
+          <ol>
+            <li>Click <em>More info</em> on the blue screen.</li>
+            <li>Click <em>Run anyway</em>.</li>
+          </ol>
+        </div>
+        <div class="unsigned" id="unsigned-linux" hidden>
+          <p>Linux asks nothing. The .deb installs through your package manager; the .AppImage runs once it is marked executable.</p>
+        </div>
+        <p class="dl-note">What you install is exactly what our public build made; from then on the app updates itself after asking you. The signatures come with the Marigold association.</p>
         <details class="fine">
           <summary>Other ways: the terminal wallet, Docker, a Raspberry Pi</summary>
           <p>The same wallet as commands in a terminal, one file and no install, for Linux, macOS, Windows and the Raspberry Pi: <a href="https://github.com/marigoldcash/marigold-wallet/releases/latest">the <code>marigold-cli</code> files on the release page</a>. It updates itself too: type <code>update</code>.</p>
@@ -565,6 +616,8 @@ docker compose run --rm wallet</code></pre>
       btn.textContent = "Download";
     }
     note.textContent = f[1];
+    var os = sel.value.indexOf("macos") === 0 ? "mac" : sel.value === "windows" ? "win" : "linux";
+    ["mac", "win", "linux"].forEach(function (k) { document.getElementById("unsigned-" + k).hidden = k !== os; });
   }
   sel.addEventListener("change", render);
   render();
