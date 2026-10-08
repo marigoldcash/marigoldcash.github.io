@@ -421,6 +421,33 @@
           <p class="dl-note" id="dl-note"></p>
         </div>
         <div class="unsigned" id="unsigned-mac" hidden>
+          <p><strong>The first time you open it, your Mac will say the app is damaged.</strong> It is not: the app is not yet signed with Apple, and on an Apple-silicon Mac that is the message you get. One command fixes it, once.</p>
+          <svg class="shot" viewBox="0 0 320 150" role="img" aria-label="The macOS message: Marigold is damaged and can't be opened, with the buttons Cancel and Move to Bin; then a Terminal window with the command that removes the quarantine mark">
+  <rect x="8" y="6" width="150" height="138" rx="10" fill="#f4f4f6" stroke="#c9c9cf"/>
+  <circle cx="83" cy="34" r="14" fill="#fff" stroke="#c9c9cf"/><text x="83" y="39" text-anchor="middle" font-size="14" fill="#e0a21c">!</text>
+  <text x="83" y="60" text-anchor="middle" font-size="7.6" font-weight="700" fill="#1d1d1f">“Marigold” is damaged and</text>
+  <text x="83" y="70" text-anchor="middle" font-size="7.6" font-weight="700" fill="#1d1d1f">can’t be opened.</text>
+  <text x="83" y="84" text-anchor="middle" font-size="6" fill="#515154">You should move it to the Bin.</text>
+  <rect x="24" y="100" width="118" height="15" rx="5" fill="#0a7cff"/><text x="83" y="110.5" text-anchor="middle" font-size="7" fill="#fff">Cancel</text>
+  <rect x="24" y="120" width="118" height="15" rx="5" fill="#fff" stroke="#c9c9cf"/><text x="83" y="130.5" text-anchor="middle" font-size="7" fill="#1d1d1f">Move to Bin</text>
+  <text x="166" y="20" font-size="7" font-weight="700" fill="#1d1d1f">Terminal</text>
+  <rect x="166" y="30" width="146" height="110" rx="8" fill="#1e1e1e" stroke="#c9c9cf"/>
+  <text x="174" y="52" font-size="6.2" fill="#9ae59a" font-family="monospace">$ xattr -dr com.apple.quarantine \</text>
+  <text x="174" y="62" font-size="6.2" fill="#9ae59a" font-family="monospace">    "/Applications/Marigold.app"</text>
+  <text x="174" y="80" font-size="6.2" fill="#dcdcdc" font-family="monospace">$ open -a Marigold</text>
+  <path d="M232 100 L212 60" stroke="#e4a33d" stroke-width="1.6" fill="none"/><circle cx="232" cy="100" r="2.2" fill="#e4a33d"/>
+</svg>
+          <ol>
+            <li>Drag Marigold from the disk image to <em>Applications</em>, and click <em>Cancel</em> on the message if it appears.</li>
+            <li>Open <em>Terminal</em> (press ⌘ Space, type Terminal, press Enter) and paste this line, then press Enter:</li>
+          </ol>
+<pre><code>xattr -dr com.apple.quarantine "/Applications/Marigold.app"</code></pre>
+          <ol start="3">
+            <li>Open Marigold from <em>Applications</em>.</li>
+          </ol>
+          <p>The command removes the mark Safari puts on downloads, which is what the Mac is refusing. Nothing else changes.</p>
+        </div>
+        <div class="unsigned" id="unsigned-mac-intel" hidden>
           <p><strong>The first time you open it, your Mac will refuse.</strong> That is us, not malware: the app is not yet signed with Apple, and the Mac says so. It happens once.</p>
           <svg class="shot" viewBox="0 0 320 150" role="img" aria-label="The macOS message: Marigold Not Opened, with the buttons Done and Move to Trash; then System Settings, Privacy and Security, with the button Open Anyway">
   <rect x="8" y="6" width="150" height="138" rx="10" fill="#f4f4f6" stroke="#c9c9cf"/>
@@ -601,7 +628,7 @@ docker compose run --rm wallet</code></pre>
   if (guess) sel.value = guess;
   var files = {
     "windows": function (v) { return ["marigold-wallet-" + v + "-windows-x86_64.msi", "An installer. Windows shows a blue screen once: More info, Run anyway."]; },
-    "macos-arm64": function (v) { return ["marigold-wallet-" + v + "-macos-arm64.dmg", "A disk image: drag Marigold to Applications. Not sure which Mac? Apple menu, About This Mac: a chip named M-something is Apple silicon."]; },
+    "macos-arm64": function (v) { return ["marigold-wallet-" + v + "-macos-arm64.dmg", "A disk image: drag Marigold to Applications, then the one command below. Not sure which Mac? Apple menu, About This Mac: a chip named M-something is Apple silicon."]; },
     "macos-x86_64": function (v) { return ["marigold-wallet-" + v + "-macos-x86_64.dmg", "A disk image: drag Marigold to Applications. For Macs with an Intel processor."]; },
     "linux-deb": function (v) { return ["marigold-wallet-" + v + "-linux-x86_64.deb", "Install it with your package manager, or: sudo apt install ./marigold-wallet-" + v + "-linux-x86_64.deb"]; },
     "linux-appimage": function (v) { return ["marigold-wallet-" + v + "-linux-x86_64.AppImage", "Mark it executable (right-click, Properties, or chmod +x) and start it. No install."]; }
@@ -617,8 +644,8 @@ docker compose run --rm wallet</code></pre>
       btn.textContent = "Download";
     }
     note.textContent = f[1];
-    var os = sel.value.indexOf("macos") === 0 ? "mac" : sel.value === "windows" ? "win" : "linux";
-    ["mac", "win", "linux"].forEach(function (k) { document.getElementById("unsigned-" + k).hidden = k !== os; });
+    var os = sel.value === "macos-arm64" ? "mac" : sel.value === "macos-x86_64" ? "mac-intel" : sel.value === "windows" ? "win" : "linux";
+    ["mac", "mac-intel", "win", "linux"].forEach(function (k) { document.getElementById("unsigned-" + k).hidden = k !== os; });
   }
   sel.addEventListener("change", render);
   render();
