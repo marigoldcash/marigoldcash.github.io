@@ -275,6 +275,7 @@
   .unsigned[hidden]{display:none}
   .unsigned p{margin:0}
   .unsigned ol{margin:0;padding-left:1.2rem;display:flex;flex-direction:column;gap:.3rem}
+  .unsigned pre{margin:0;font-size:.78rem}
   .shot{width:100%;height:auto;border:1px solid #e5dcc4;border-radius:8px;background:#fff}
   details.fine{border-top:1px solid #e5dcc4;padding-top:.5rem;font-size:.9rem;color:#3d4a42}
   details.fine summary{cursor:pointer;color:var(--ink);font-weight:500}
@@ -415,6 +416,7 @@
             <option value="macos-arm64">macOS, Apple silicon (M1 to M4)</option>
             <option value="macos-x86_64">macOS, Intel</option>
             <option value="linux-deb">Linux, Debian or Ubuntu (.deb)</option>
+            <option value="linux-rpm">Linux, Fedora or openSUSE (.rpm)</option>
             <option value="linux-appimage">Linux, any other (.AppImage)</option>
           </select>
           <a class="btn" id="dl-btn" href="https://github.com/marigoldcash/marigold-wallet/releases/latest">Download</a>
@@ -496,8 +498,21 @@
             <li>Click <em>Run anyway</em>.</li>
           </ol>
         </div>
-        <div class="unsigned" id="unsigned-linux" hidden>
-          <p>Linux asks nothing. The .deb installs through your package manager; the .AppImage runs once it is marked executable.</p>
+        <div class="unsigned" id="unsigned-linux-deb" hidden>
+          <p><strong>Linux asks nothing.</strong> Install the package the way you install any other: double-click it, or in a terminal in your Downloads folder:</p>
+<pre><code>sudo apt install ./marigold-wallet-<span class="v">VERSION</span>-linux-x86_64.deb</code></pre>
+          <p>Marigold then appears in your applications menu, and the package manager keeps it.</p>
+        </div>
+        <div class="unsigned" id="unsigned-linux-rpm" hidden>
+          <p><strong>Linux asks nothing.</strong> Install the package the way you install any other: double-click it, or in a terminal in your Downloads folder:</p>
+<pre><code>sudo dnf install ./marigold-wallet-<span class="v">VERSION</span>-linux-x86_64.rpm</code></pre>
+          <p>On openSUSE, <code>sudo zypper install</code> with the same file. Marigold then appears in your applications menu.</p>
+        </div>
+        <div class="unsigned" id="unsigned-linux-appimage" hidden>
+          <p><strong>Linux asks nothing, but an AppImage has to be allowed to run.</strong> Right-click the downloaded file, choose Properties, and tick "Allow executing file as program" (or "Executable as Program"), then double-click it. In a terminal, the same is:</p>
+<pre><code>chmod +x marigold-wallet-<span class="v">VERSION</span>-linux-x86_64.AppImage
+./marigold-wallet-<span class="v">VERSION</span>-linux-x86_64.AppImage</code></pre>
+          <p>Nothing is installed; the file is the app. Keep it where you like. If it refuses to start with a message about FUSE, install <code>libfuse2</code> from your package manager once.</p>
         </div>
         <p class="dl-note">What you install is exactly what our public build made; from then on the app updates itself after asking you. The signatures come with the Marigold association.</p>
         <details class="fine">
@@ -624,14 +639,15 @@ docker compose run --rm wallet</code></pre>
   var sel = document.getElementById("dl-os"), btn = document.getElementById("dl-btn"), note = document.getElementById("dl-note");
   if (!sel) return;
   var ua = navigator.userAgent, plat = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
-  var guess = /Windows/i.test(ua) ? "windows" : /Mac/i.test(plat) || /Mac OS/i.test(ua) ? "macos-arm64" : /Linux/i.test(plat) ? "linux-deb" : "";
+  var guess = /Windows/i.test(ua) ? "windows" : /Mac/i.test(plat) || /Mac OS/i.test(ua) ? "macos-arm64" : /Linux/i.test(plat) ? (/Fedora|SUSE|Red Hat|CentOS|Rocky|Alma/i.test(ua) ? "linux-rpm" : "linux-deb") : "";
   if (guess) sel.value = guess;
   var files = {
     "windows": function (v) { return ["marigold-wallet-" + v + "-windows-x86_64.msi", "An installer. Windows shows a blue screen once: More info, Run anyway."]; },
     "macos-arm64": function (v) { return ["marigold-wallet-" + v + "-macos-arm64.dmg", "A disk image: drag Marigold to Applications, then the one command below. Not sure which Mac? Apple menu, About This Mac: a chip named M-something is Apple silicon."]; },
     "macos-x86_64": function (v) { return ["marigold-wallet-" + v + "-macos-x86_64.dmg", "A disk image: drag Marigold to Applications. For Macs with an Intel processor."]; },
-    "linux-deb": function (v) { return ["marigold-wallet-" + v + "-linux-x86_64.deb", "Install it with your package manager, or: sudo apt install ./marigold-wallet-" + v + "-linux-x86_64.deb"]; },
-    "linux-appimage": function (v) { return ["marigold-wallet-" + v + "-linux-x86_64.AppImage", "Mark it executable (right-click, Properties, or chmod +x) and start it. No install."]; }
+    "linux-deb": function (v) { return ["marigold-wallet-" + v + "-linux-x86_64.deb", "A package for Debian, Ubuntu, Mint and their relatives."]; },
+    "linux-rpm": function (v) { return ["marigold-wallet-" + v + "-linux-x86_64.rpm", "A package for Fedora, openSUSE, RHEL and their relatives."]; },
+    "linux-appimage": function (v) { return ["marigold-wallet-" + v + "-linux-x86_64.AppImage", "One file that runs on any Linux. No install."]; }
   };
   var version = null;
   function render() {
@@ -644,8 +660,9 @@ docker compose run --rm wallet</code></pre>
       btn.textContent = "Download";
     }
     note.textContent = f[1];
-    var os = sel.value === "macos-arm64" ? "mac" : sel.value === "macos-x86_64" ? "mac-intel" : sel.value === "windows" ? "win" : "linux";
-    ["mac", "mac-intel", "win", "linux"].forEach(function (k) { document.getElementById("unsigned-" + k).hidden = k !== os; });
+    var os = sel.value === "macos-arm64" ? "mac" : sel.value === "macos-x86_64" ? "mac-intel" : sel.value === "windows" ? "win" : sel.value;
+    ["mac", "mac-intel", "win", "linux-deb", "linux-rpm", "linux-appimage"].forEach(function (k) { document.getElementById("unsigned-" + k).hidden = k !== os; });
+    Array.prototype.forEach.call(document.querySelectorAll(".unsigned .v"), function (el) { el.textContent = version || "VERSION"; });
   }
   sel.addEventListener("change", render);
   render();
