@@ -24,5 +24,37 @@
         }
       ]
     }
-  ]
+  ],
+  "release": {
+    "version": "2.79.323",
+    "issued_at": 1791458332,
+    "assets": {
+      "marigold-cli-linux-arm64": "a4ae42c445532247354668cb743a3272bf6210d73165e7bc8b5be241514a942c",
+      "marigold-cli-linux-x86_64": "fe6dfa70de8f3902d5fc2c289820676f25c90ca9d7a85123b547210971631081",
+      "marigold-cli-macos-arm64": "e93ae6591e693a68134933ea7067322d9a367fc08f6a6d1b89d6574a78e919c1",
+      "marigold-cli-macos-universal": "8f9739c78ba2a0d7d2cb281dc5f48dcb6efdc90b56600e6e3820563f23590f62",
+      "marigold-cli-macos-x86_64": "7b57a330c6c3320c261396588b8733678e2551070d7e64c6c9a24f542061b32b",
+      "marigold-cli-windows-x86_64.exe": "089853d2b73bbc4e41b36a0a7f40899e5af88a841791d68fe63f80ed104de1fd",
+      "marigold-trustee-signer-linux-arm64": "aae6550e8482d5d68b99d596e854f5df092a072dcd711248ef6b174a328ce3f3",
+      "marigoldd-linux-arm64": "591e63e077a812ee2595608de69b1db920c22abeefbc705e2ce5814e9855db71"
+    },
+    "signatures": [
+      {
+        "trustee": 0,
+        "signature": "0e53df82a68a3ff38f350eb59433a630f220362a52d72d6ced545b54622088cf7f3d3f36deb8cfaa73e807f9d79d810a9008e350cf82fb90e89c7ab6924ca86a"
+      },
+      {
+        "trustee": 1,
+        "signature": "3b3f340814c8bdd4bd453f74848033503b25daa5ae929a42e542746768e5586888b973aceda3ed0ebd114a63bacb4d705e84f659258e683ff7f696717c0fc1ff"
+      },
+      {
+        "trustee": 2,
+        "signature": "9eec3d29268e2c33e8c98e21c40e2c7c9cccc1bf1f8377ddc425fa925bbd8e7187fc6636dd171a719828853b8377bd6ce43b34776822279622d222735f46dab3"
+      },
+      {
+        "trustee": 3,
+        "signature": "2bb7de76aa211554e6867e079d88d1df26b9c6f5d30d724e93e8daf25bd81c4b4c07a83b0bdfdf32e5d52502eb4a9830384a1b7627565aeb57f4b0d8d5e9797a"
+      }
+    ]
+  }
 }
