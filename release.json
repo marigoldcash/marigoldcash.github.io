@@ -26,34 +26,34 @@
     }
   ],
   "release": {
-    "version": "2.80.324",
-    "issued_at": 1791500070,
+    "version": "2.81.326",
+    "issued_at": 1791567801,
     "assets": {
-      "marigold-cli-linux-arm64": "f0cc8eaa69a2b87496c1aefc1970ed916043356ecf7ed3d40025685041353df2",
-      "marigold-cli-linux-x86_64": "4392754686739003f10375d5eea32807a0f567d1ca640a84bfacb2f9af6117aa",
-      "marigold-cli-macos-arm64": "1798b488a71021242b09c62aff00e5910e67fd5b27f3450b0f9a5404c27ac42c",
-      "marigold-cli-macos-universal": "c7e8c007638af72e3988e41c3ce2eca1370bcf55c32ab2d156522b7b7a4b1ea1",
-      "marigold-cli-macos-x86_64": "f85b0866597bc82cfa8880ddf0340713628b0194597f06df598f29aca858cbad",
-      "marigold-cli-windows-x86_64.exe": "5ddc7587934020ca20c91c270e61163f6493b233d1716a63769621c1533b84d9",
-      "marigold-trustee-signer-linux-arm64": "899e8085250021b28f4b02fe2107979994cc9cd3afc1f0de5aba4935ce6c6964",
-      "marigoldd-linux-arm64": "828a3d4892f4109126c80487bcda8b60ba39a50488813e8641513b49a2eb2607"
+      "marigold-cli-linux-arm64": "d9f43bb58fb65f4c51b02c05452a08912d272d7cd8208b8df97453ddab106d3c",
+      "marigold-cli-linux-x86_64": "1ad1a1e1b8026affefdad018a68e56cedc357237b534ac5c80c35fe81a0e0e49",
+      "marigold-cli-macos-arm64": "c84308c3e08062445461fdba7132c7428cfa6a891c95beb058d9f2ddb443a95c",
+      "marigold-cli-macos-universal": "f889eed2af49b0bd0b47a4124cadcdc9dad8fc96164d15d1d5b5931177cdd91d",
+      "marigold-cli-macos-x86_64": "6f0bcd864517f8491a006b35a1a5f558f531162b8de7ead9662a4dd20d1a8969",
+      "marigold-cli-windows-x86_64.exe": "0e0f92ceed9d3e327b88da240265025c9abe268707a898f36f8967fde9f6851e",
+      "marigold-trustee-signer-linux-arm64": "71c0ed85849942bf367227bbe8d07ce06bcafbb11c28055392767dbc79f58225",
+      "marigoldd-linux-arm64": "5b2980017a9039fceb64e301dc4cfe40688e4d414de7048a6a87c2eaae1782db"
     },
     "signatures": [
       {
         "trustee": 0,
-        "signature": "fc6177666c864049edcd0adf255939a7d681cfa6a7c894549e0b8ee1cab8799ffb18304e3557e2dd620d599ed2f07f975838a147aa3bddec3be1d90479071cc9"
+        "signature": "705101341886928c39ba2267f794a81d66ff34989bd12793d2283b341e32e387877d253d165064ad9bd6ee659ee769ee494e5b2a5234e73e12879f7a9a384993"
       },
       {
         "trustee": 1,
-        "signature": "c9d9fab16bd6e41d939931ed38a93ba37046a314fdc39881619ca865b9c6fea2cfc07564592674a35a9fb2faea9205f4e5e2dfd041a8638c5ab866b0d40dee68"
+        "signature": "d6ac13a8f25c84d303904e2a217895afd763c80524253bf0618af492970651f1c87945d9748e2b43612b380f16631da7ce458d4e9b7db1d83cc9763185aaa171"
       },
       {
         "trustee": 2,
-        "signature": "0302cebe783b86de54159af3c4c02380122791e86380b6bd7b414d5407a3943a32d851f5009402569578704f5a3b76bebb7216cca43b6ecf6f4408e6b5ed97c3"
+        "signature": "15cb19dbdd7a1a2def84538ac991aee46ab77470ef1d659058b95b67536cd8cb1408fa07112110a2231506020d849dd1b7f606fb581025da9164d7d9b743919d"
       },
       {
         "trustee": 3,
-        "signature": "79de4e2469541a9fcd3421be893eda18628f005a7c4f874fa67a3b3cf32e712757dc145999efe345dca17e31003677fbbe4676d90df35590d1b08bb3967c3cdd"
+        "signature": "165f705d15633bc9bdfdf2fd6f9f217fe45c4561bbcf04b28b68e771d9c60faee31f757f762b8212a0eb3d4cd99b4bbfd26a4df868baf6d08e7a6e9d27e5580a"
       }
     ]
   }
