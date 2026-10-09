@@ -423,6 +423,11 @@
           <p class="dl-note" id="dl-note"></p>
         </div>
         <div class="unsigned" id="unsigned-mac" hidden>
+          <ol>
+            <li>Double-click the .dmg file you downloaded. A new window opens.</li>
+            <li>Drag the Marigold icon onto the <em>Applications</em> icon.</li>
+            <li>Go to <em>Applications</em> and double-click Marigold.</li>
+          </ol>
           <p><strong>The first time you open it, your Mac will say the app is damaged.</strong> It is not: the app is not yet signed with Apple, and on an Apple-silicon Mac that is the message you get. One command fixes it, once.</p>
           <svg class="shot" viewBox="0 0 320 150" role="img" aria-label="The macOS message: Marigold is damaged and can't be opened, with the buttons Cancel and Move to Bin; then a Terminal window with the command that removes the quarantine mark">
   <rect x="8" y="6" width="150" height="138" rx="10" fill="#f4f4f6" stroke="#c9c9cf"/>
@@ -439,15 +444,15 @@
   <text x="174" y="80" font-size="6.2" fill="#dcdcdc" font-family="monospace">$ open -a Marigold</text>
   <path d="M232 100 L212 60" stroke="#e4a33d" stroke-width="1.6" fill="none"/><circle cx="232" cy="100" r="2.2" fill="#e4a33d"/>
 </svg>
-          <ol>
-            <li>Drag Marigold from the disk image to <em>Applications</em>, and click <em>Cancel</em> on the message if it appears.</li>
+          <ol start="4">
+            <li>Click <em>Cancel</em> on the message.</li>
             <li>Open <em>Terminal</em> (press ⌘ Space, type Terminal, press Enter) and paste this line, then press Enter:</li>
           </ol>
 <pre><code>xattr -dr com.apple.quarantine "/Applications/Marigold.app"</code></pre>
-          <ol start="3">
-            <li>Open Marigold from <em>Applications</em>.</li>
+          <ol start="6">
+            <li>Open Marigold from <em>Applications</em> again.</li>
           </ol>
-          <p>The command removes the mark Safari puts on downloads, which is what the Mac is refusing. Nothing else changes.</p>
+          <p>The Mac's Gatekeeper refuses the app's ad-hoc signature; the command removes the quarantine mark it set on the download. Nothing else changes. The signatures come soon, and the step with them goes away.</p>
         </div>
         <div class="unsigned" id="unsigned-mac-intel" hidden>
           <p><strong>The first time you open it, your Mac will refuse.</strong> That is us, not malware: the app is not yet signed with Apple, and the Mac says so. It happens once.</p>
@@ -643,7 +648,7 @@ docker compose run --rm wallet</code></pre>
   if (guess) sel.value = guess;
   var files = {
     "windows": function (v) { return ["marigold-wallet-" + v + "-windows-x86_64.msi", "An installer. Windows shows a blue screen once: More info, Run anyway."]; },
-    "macos-arm64": function (v) { return ["marigold-wallet-" + v + "-macos-arm64.dmg", "A disk image: drag Marigold to Applications, then the one command below. Not sure which Mac? Apple menu, About This Mac: a chip named M-something is Apple silicon."]; },
+    "macos-arm64": function (v) { return ["marigold-wallet-" + v + "-macos-arm64.dmg", "Not sure which Mac? Apple menu, About This Mac: a chip named M-something is Apple silicon."]; },
     "macos-x86_64": function (v) { return ["marigold-wallet-" + v + "-macos-x86_64.dmg", "A disk image: drag Marigold to Applications. For Macs with an Intel processor."]; },
     "linux-deb": function (v) { return ["marigold-wallet-" + v + "-linux-x86_64.deb", "A package for Debian, Ubuntu, Mint and their relatives."]; },
     "linux-rpm": function (v) { return ["marigold-wallet-" + v + "-linux-x86_64.rpm", "A package for Fedora, openSUSE, RHEL and their relatives."]; },
