@@ -225,8 +225,16 @@ def litepaper_slot(text: str) -> str:
     return text[a : b + len("<!-- /translations:head -->")]
 
 
+def css_version() -> str:
+    import hashlib
+    return hashlib.sha256((ROOT / "chrome.css").read_bytes()).hexdigest()[:8]
+
+
 def stamp(path: Path, cfg: dict) -> str:
     text = path.read_text()
+    # the stylesheet link carries a hash of the sheet, so a change to chrome.css
+    # is never shown with a browser's cached copy of the old one
+    text = re.sub(r'href="/chrome\.css[^"]*"', f'href="/chrome.css?v={css_version()}"', text, count=1)
     slot = litepaper_slot(text) if cfg.get("slot") else ""
     for name, html in (("header", header_html(cfg, slot)), ("footer", footer_html(cfg))):
         r = region(text, name)
