@@ -44,39 +44,43 @@ PAGES = {
         status='<a href="#start">Public testnet · open</a>',
     ),
     "litepaper/index.html": dict(
-        key="litepaper", serial="000002", compact=True, slot=True, fine=False,
+        key="litepaper", serial="000002", compact=True, slot=True, fine=False, inband=True,
         status="Litepaper · eight languages",
     ),
     "whitepaper/index.html": dict(
         key="whitepaper", serial="000003", compact=True,
-        title="Digital cash with a fully auditable chain",
-        tag="The full technical paper: the note pool, the conservation rule, the six operations, and what an observer can and cannot see.",
+        title="The Whitepaper",
+        tag="the full technical paper, testnet edition",
         status="Whitepaper · testnet edition",
     ),
     "faq/index.html": dict(
         key="faq", serial="000004", compact=True,
         title="Questions",
-        tag="Short answers, with the trade-offs stated rather than smoothed over.",
+        tag="short answers, with the trade-offs stated rather than smoothed over",
         status="Questions · and straight answers",
     ),
     "companies/index.html": dict(
         key="companies", serial="000005", compact=True,
-        title="Prove your records were there",
-        tag="A place on the chain for your company's records, and a way to check them that depends on nobody, us included.",
+        title="For companies",
+        tag="prove your records were there: a lane of your own on the chain",
         status="For companies · anchoring",
     ),
     "about/index.html": dict(
         key="about", serial="000006", compact=True,
-        title="Who we are",
-        tag="The people and the company behind Marigold, and what each one does.",
+        title="About",
+        tag="who we are, and the company behind Marigold",
         status="About · marigold.cash",
     ),
 }
 
 
 def tabs_html(current: str) -> str:
+    """The front page's first tab is the gold "Take a note"; every other page
+    has a plain "Home" there and shows its own tab in gold instead."""
     out = []
     for key, label, href, cls in TABS:
+        if key == "home" and current != "home":
+            label, href, cls = "Home", "/", ""
         attrs = f' class="{cls}"' if cls else ""
         if key == current and key != "home":
             attrs += ' aria-current="page"'
@@ -132,31 +136,36 @@ def header_html(cfg: dict, slot: str = "") -> str:
 
 
 FOOTER = """<!-- chrome:footer -->
-<footer class="site-foot">
-  <ul class="links">
-    <li><a href="/#start">Take a note</a></li>
-    <li><a href="/litepaper/">Litepaper</a></li>
-    <li><a href="/whitepaper/">Whitepaper</a></li>
-    <li><a href="/faq/">Questions</a></li>
-    <li><a href="/companies/">Companies</a></li>
-    <li><a href="/about/">About</a></li>
-  </ul>
-  <ul class="links">
-    <li><a href="https://github.com/marigoldcash">GitHub</a></li>
-    <li><a href="https://t.me/marigoldcash_official">Telegram</a></li>
-    <li><a href="mailto:note@marigold.cash">note@marigold.cash</a></li>
-  </ul>
-{fine}</footer>
+<footer class="site-foot{cls}">
+  <div class="inner">
+    <ul class="links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/#start">Take a note</a></li>
+      <li><a href="/litepaper/">Litepaper</a></li>
+      <li><a href="/whitepaper/">Whitepaper</a></li>
+      <li><a href="/faq/">Questions</a></li>
+      <li><a href="/companies/">Companies</a></li>
+      <li><a href="/about/">About</a></li>
+    </ul>
+    <ul class="links">
+      <li><a href="https://github.com/marigoldcash">GitHub</a></li>
+      <li><a href="https://t.me/marigoldcash_official">Telegram</a></li>
+      <li><a href="mailto:note@marigold.cash">note@marigold.cash</a></li>
+    </ul>
+{fine}  </div>
+</footer>
 <!-- /chrome:footer -->"""
 
-FINE = """  <p class="fine">No token sale. No presale. Nothing to buy yet. If someone offers you Marigold for money before the network launches, they are not us.</p>
-  <p class="fine">marigold.cash Ltd · a company limited by guarantee · incorporation applied for, October 2026 · <a href="/about/#company">more</a></p>
+FINE = """    <p class="fine">No token sale. No presale. Nothing to buy yet. If someone offers you Marigold for money before the network launches, they are not us.</p>
+    <p class="fine">marigold.cash Ltd · a company limited by guarantee · incorporation applied for, October 2026 · <a href="/about/#company">more</a></p>
 """
 
 
 def footer_html(cfg: dict) -> str:
-    # the litepaper carries its own no-token-sale line in eight languages, so it skips the English one
-    return FOOTER.replace("{fine}", FINE if cfg.get("fine", True) else "")
+    # the litepaper carries its own no-token-sale line in eight languages and
+    # its own green band, so its links sit inside that band without the fine print
+    out = FOOTER.replace("{fine}", FINE if cfg.get("fine", True) else "")
+    return out.replace("{cls}", " inband" if cfg.get("inband") else "")
 
 
 def region(text: str, name: str):
