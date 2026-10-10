@@ -19,7 +19,7 @@
   }
   *{box-sizing:border-box}
   body{
-    margin:0; background:var(--cream); color:var(--ink);
+    margin:0; background:var(--page-bg); color:var(--page-fg);
     font-family:"Fraunces",serif; font-weight:300; line-height:1.7;
     padding:0;
   }
@@ -30,13 +30,13 @@
     margin-bottom:.9rem;
   }
   h1{font-size:clamp(2rem,6vw,2.8rem); font-weight:400; line-height:1.15; margin:0 0 .6rem}
-  .lede{color:#33453b; margin:0 0 2.5rem}
+  .lede{color:var(--text-3); margin:0 0 2.5rem}
   h2{
     font-family:"IBM Plex Mono",monospace; font-size:.72rem; font-weight:500;
     letter-spacing:.2em; text-transform:uppercase; color:var(--moss);
-    margin:3rem 0 .8rem; border-top:1px solid rgba(154,168,148,.45); padding-top:1.4rem;
+    margin:3rem 0 .8rem; border-top:1px solid var(--hair-2); padding-top:1.4rem;
   }
-  details{border-bottom:1px solid rgba(154,168,148,.35); padding:1.1rem 0}
+  details{border-bottom:1px solid var(--hair); padding:1.1rem 0}
   summary{
     cursor:pointer; font-size:1.12rem; font-weight:400; list-style:none;
     display:flex; gap:.8rem; align-items:baseline;
@@ -44,14 +44,14 @@
   summary::-webkit-details-marker{display:none}
   summary::before{content:"+"; color:var(--amber); font-family:"IBM Plex Mono",monospace; flex:none}
   details[open] summary::before{content:"\2212"}
-  details > *:not(summary){color:#33453b}
+  details > *:not(summary){color:var(--text-3)}
   details p:first-of-type{margin-top:1rem}
   code{
     font-family:"IBM Plex Mono",monospace; font-size:.85em;
-    background:rgba(154,168,148,.22); padding:.15em .45em; border-radius:4px;
+    background:var(--code-bg); padding:.15em .45em; border-radius:4px;
   }
   table{border-collapse:collapse; width:100%; margin:1.2rem 0; font-size:.95rem}
-  th,td{text-align:left; padding:.6rem .8rem; border-bottom:1px solid rgba(154,168,148,.35); vertical-align:top}
+  th,td{text-align:left; padding:.6rem .8rem; border-bottom:1px solid var(--hair); vertical-align:top}
   th{font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.14em;
      text-transform:uppercase; color:var(--moss); font-weight:500}
   a{color:var(--amber)}
@@ -59,6 +59,34 @@
          letter-spacing:.06em; color:var(--moss)}
 </style>
 <!-- chrome:header -->
+<script>
+  (function () {
+    var t = null; try { t = localStorage.getItem("marigold-theme"); } catch (e) {}
+    if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
+<nav class="topbar">
+  <button class="tgl" id="themeBtn" type="button" aria-pressed="false">
+    <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.2M12 19.4v2.2M4.2 12H2M22 12h-2.2M6.5 6.5 4.9 4.9M19.1 19.1l-1.6-1.6M17.5 6.5l1.6-1.6M4.9 19.1l1.6-1.6"/></svg>
+    <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4 8.4 8.4 0 1 0 20 14.2Z"/></svg>
+    <span class="sr" id="themeLabel">Switch between day and night</span>
+  </button>
+  <div class="grow"></div>
+  <label class="langpick" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+    <span class="sr" id="langLabel">Language</span>
+    <select id="langSel" aria-labelledby="langLabel">
+      <option value="en">English</option>
+      <option value="es">Español</option>
+      <option value="de">Deutsch</option>
+      <option value="fr">Français</option>
+      <option value="it">Italiano</option>
+      <option value="pt">Português</option>
+      <option value="ru">Русский</option>
+      <option value="zh">中文</option>
+    </select>
+  </label>
+</nav>
 <div class="sky">
   <header class="note compact" aria-label="Marigold specimen note">
     <div class="micro top" aria-hidden="true">marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · </div>
@@ -99,6 +127,23 @@
     <div class="micro bottom" aria-hidden="true">marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · </div>
   </header>
 </div>
+<script>
+  (function () {
+    var root = document.documentElement, btn = document.getElementById("themeBtn");
+    var dark = function () {
+      var chosen = root.getAttribute("data-theme");
+      return chosen ? chosen === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    };
+    var apply = function () { btn.setAttribute("aria-pressed", dark() ? "true" : "false"); };
+    apply();
+    btn.addEventListener("click", function () {
+      var next = dark() ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("marigold-theme", next); } catch (e) {}
+      apply();
+    });
+  })();
+</script>
 <!-- /chrome:header -->
 <main>
 

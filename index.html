@@ -27,8 +27,8 @@
   }
   *{margin:0;padding:0;box-sizing:border-box}
   body{
-    background:var(--cream);
-    color:var(--ink);
+    background:var(--page-bg);
+    color:var(--page-fg);
     font-family:"Fraunces",serif;
     font-weight:300;
     line-height:1.6;
@@ -37,9 +37,9 @@
   .page{max-width:62rem;margin:0 auto;padding:0 1.2rem 4rem}
   .lede{
     max-width:40em;margin:3rem auto 2.4rem;text-align:center;
-    font-size:clamp(1.15rem,2.4vw,1.4rem);line-height:1.55;color:#2f3d35;
+    font-size:clamp(1.15rem,2.4vw,1.4rem);line-height:1.55;color:var(--text-3);
   }
-  .lede strong{font-weight:500;color:var(--ink)}
+  .lede strong{font-weight:500;color:var(--page-fg)}
   .kicker{
     font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.24em;
     text-transform:uppercase;color:var(--amber);margin:0 0 .5rem;
@@ -52,8 +52,8 @@
   }
   .step{
     counter-increment:step;
-    background:#fff;border:1px solid #d8cfb8;border-radius:14px;padding:1.3rem 1.3rem 1.2rem;
-    box-shadow:0 18px 40px -30px rgba(20,31,25,.5);
+    background:var(--card);border:1px solid var(--line-2);border-radius:14px;padding:1.3rem 1.3rem 1.2rem;
+    box-shadow:0 18px 40px -30px var(--shadow);
     display:flex;flex-direction:column;gap:.6rem;
   }
   .step::before{
@@ -61,43 +61,43 @@
     font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.2em;color:var(--amber);
   }
   .step h3{font-size:1.15rem;font-weight:500;margin:0}
-  .step p{margin:0;color:#3d4a42;font-size:.98rem}
+  .step p{margin:0;color:var(--text);font-size:.98rem}
   .step .cta{margin-top:auto;padding-top:.6rem}
-  .step ol{margin:0;padding-left:1.2rem;color:#3d4a42;font-size:.98rem;display:flex;flex-direction:column;gap:.4rem}
-  .step em{font-style:italic;color:var(--ink)}
+  .step ol{margin:0;padding-left:1.2rem;color:var(--text);font-size:.98rem;display:flex;flex-direction:column;gap:.4rem}
+  .step em{font-style:italic;color:var(--page-fg)}
   pre{
     font-family:"IBM Plex Mono",monospace;font-size:.82rem;line-height:1.55;
     background:var(--note);color:var(--petal);border-radius:10px;padding:.9rem 1rem;
     overflow-x:auto;margin:.3rem 0 0;
   }
-  code{font-family:"IBM Plex Mono",monospace;font-size:.88em;background:#e5dcc4;border-radius:4px;padding:1px 5px}
+  code{font-family:"IBM Plex Mono",monospace;font-size:.88em;background:var(--line);border-radius:4px;padding:1px 5px}
   pre code{background:none;padding:0;font-size:1em}
   a{color:var(--amber)}
-  a:hover{color:#8a4c12}
+  a:hover{color:var(--link-hover)}
   .btn{
     display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:.76rem;letter-spacing:.12em;
-    text-transform:uppercase;text-decoration:none;color:var(--note);background:var(--gold);
+    text-transform:uppercase;text-decoration:none;color:var(--note-edge);background:var(--gold);
     border:1px solid var(--amber);border-radius:10px;padding:.7rem 1rem;
   }
   .btn:hover{background:#f0b45a;color:var(--note)}
-  .btn.quiet{background:transparent;color:#4a5c52;border-color:#c9bfa4}
-  .btn.quiet:hover{color:var(--ink);border-color:var(--amber)}
+  .btn.quiet{background:transparent;color:var(--text-2);border-color:var(--line-3)}
+  .btn.quiet:hover{color:var(--page-fg);border-color:var(--amber)}
   .row{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center}
   .dl{display:flex;flex-direction:column;gap:.6rem;margin-top:.2rem}
   .dl select{
-    font-family:"IBM Plex Mono",monospace;font-size:.8rem;letter-spacing:.04em;color:var(--ink);
-    background:#fff;border:1px solid #c9bfa4;border-radius:10px;padding:.6rem .8rem;width:100%;
+    font-family:"IBM Plex Mono",monospace;font-size:.8rem;letter-spacing:.04em;color:var(--page-fg);
+    background:var(--card);border:1px solid var(--line-3);border-radius:10px;padding:.6rem .8rem;width:100%;
   }
   .dl .btn{text-align:center}
-  .dl-note{font-size:.82rem;color:#4a5c52;margin:0;min-height:1.2em}
-  .unsigned{border-top:1px solid #e5dcc4;padding-top:.6rem;font-size:.92rem;color:#3d4a42;display:flex;flex-direction:column;gap:.5rem}
+  .dl-note{font-size:.82rem;color:var(--text-2);margin:0;min-height:1.2em}
+  .unsigned{border-top:1px solid var(--line);padding-top:.6rem;font-size:.92rem;color:var(--text);display:flex;flex-direction:column;gap:.5rem}
   .unsigned[hidden]{display:none}
   .unsigned p{margin:0}
   .unsigned ol{margin:0;padding-left:1.2rem;display:flex;flex-direction:column;gap:.3rem}
   .unsigned pre{margin:0;font-size:.78rem}
-  .shot{width:100%;height:auto;border:1px solid #e5dcc4;border-radius:8px;background:#fff}
-  details.fine{border-top:1px solid #e5dcc4;padding-top:.5rem;font-size:.9rem;color:#3d4a42}
-  details.fine summary{cursor:pointer;color:var(--ink);font-weight:500}
+  .shot{width:100%;height:auto;border:1px solid var(--line);border-radius:8px;background:var(--card)}
+  details.fine{border-top:1px solid var(--line);padding-top:.5rem;font-size:.9rem;color:var(--text)}
+  details.fine summary{cursor:pointer;color:var(--page-fg);font-weight:500}
   details.fine p{margin:.5rem 0 0}
   .papers{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1.1rem}
   .paper{
@@ -114,16 +114,44 @@
     display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:1rem;
     font-family:"IBM Plex Mono",monospace;font-size:.78rem;letter-spacing:.04em;
   }
-  .facts div{border-top:2px solid var(--gold);padding-top:.6rem;color:#3d4a42}
-  .facts b{display:block;font-size:1.25rem;font-weight:500;color:var(--ink);letter-spacing:0;font-family:"Fraunces",serif}
+  .facts div{border-top:2px solid var(--gold);padding-top:.6rem;color:var(--text)}
+  .facts b{display:block;font-size:1.25rem;font-weight:500;color:var(--page-fg);letter-spacing:0;font-family:"Fraunces",serif}
   .note-of-caution{
-    margin-top:3.4rem;border-left:3px solid var(--gold);padding:.2rem 0 .2rem 1.1rem;color:#3d4a42;max-width:44em;
+    margin-top:3.4rem;border-left:3px solid var(--gold);padding:.2rem 0 .2rem 1.1rem;color:var(--text);max-width:44em;
   }
 </style>
 </head>
 <body>
 
 <!-- chrome:header -->
+<script>
+  (function () {
+    var t = null; try { t = localStorage.getItem("marigold-theme"); } catch (e) {}
+    if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
+<nav class="topbar">
+  <button class="tgl" id="themeBtn" type="button" aria-pressed="false">
+    <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.2M12 19.4v2.2M4.2 12H2M22 12h-2.2M6.5 6.5 4.9 4.9M19.1 19.1l-1.6-1.6M17.5 6.5l1.6-1.6M4.9 19.1l1.6-1.6"/></svg>
+    <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4 8.4 8.4 0 1 0 20 14.2Z"/></svg>
+    <span class="sr" id="themeLabel">Switch between day and night</span>
+  </button>
+  <div class="grow"></div>
+  <label class="langpick" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+    <span class="sr" id="langLabel">Language</span>
+    <select id="langSel" aria-labelledby="langLabel">
+      <option value="en">English</option>
+      <option value="es">Español</option>
+      <option value="de">Deutsch</option>
+      <option value="fr">Français</option>
+      <option value="it">Italiano</option>
+      <option value="pt">Português</option>
+      <option value="ru">Русский</option>
+      <option value="zh">中文</option>
+    </select>
+  </label>
+</nav>
 <div class="sky">
   <header class="note" aria-label="Marigold specimen note">
     <div class="micro top" aria-hidden="true">marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · </div>
@@ -163,6 +191,23 @@
     <div class="micro bottom" aria-hidden="true">marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · </div>
   </header>
 </div>
+<script>
+  (function () {
+    var root = document.documentElement, btn = document.getElementById("themeBtn");
+    var dark = function () {
+      var chosen = root.getAttribute("data-theme");
+      return chosen ? chosen === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    };
+    var apply = function () { btn.setAttribute("aria-pressed", dark() ? "true" : "false"); };
+    apply();
+    btn.addEventListener("click", function () {
+      var next = dark() ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("marigold-theme", next); } catch (e) {}
+      apply();
+    });
+  })();
+</script>
 <!-- /chrome:header -->
 
 <main class="page">

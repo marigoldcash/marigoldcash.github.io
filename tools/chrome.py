@@ -37,6 +37,38 @@ TABS = [
 
 MICRO = "marigold · digital cash · " * 12
 
+# The top bar, lifted from the litepaper so the sync there keeps finding the
+# ids it rewrites (themeLabel, langLabel, langSel).
+TOPBAR = (ROOT / "tools" / "topbar.html").read_text()
+
+# Runs before the note paints: an explicit choice of day or night is restored
+# from the browser's storage, the same key the litepaper uses.
+BOOT = """<script>
+  (function () {
+    var t = null; try { t = localStorage.getItem("marigold-theme"); } catch (e) {}
+    if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>"""
+
+# The day/night button on pages that have no script of their own.
+TOGGLE = """<script>
+  (function () {
+    var root = document.documentElement, btn = document.getElementById("themeBtn");
+    var dark = function () {
+      var chosen = root.getAttribute("data-theme");
+      return chosen ? chosen === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    };
+    var apply = function () { btn.setAttribute("aria-pressed", dark() ? "true" : "false"); };
+    apply();
+    btn.addEventListener("click", function () {
+      var next = dark() ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("marigold-theme", next); } catch (e) {}
+      apply();
+    });
+  })();
+</script>"""
+
 PAGES = {
     "index.html": dict(
         key="home", serial="000001", compact=False, wordmark_h1=True,
@@ -44,7 +76,7 @@ PAGES = {
         status='<a href="#start">Public testnet · open</a>',
     ),
     "litepaper/index.html": dict(
-        key="litepaper", serial="000002", compact=True, slot=True, fine=False, inband=True,
+        key="litepaper", serial="000002", compact=True, slot=True, fine=False, inband=True, languages=True,
         status="Litepaper · eight languages",
     ),
     "whitepaper/index.html": dict(
@@ -108,8 +140,13 @@ def header_html(cfg: dict, slot: str = "") -> str:
     face.append(f'<p class="status">{cfg["status"]}</p>')
     face.append(f'<nav class="ways" aria-label="Pages">\n{tabs_html(cfg["key"])}\n      </nav>')
     face_html = "\n\n      ".join(face)
+    # the language picker shows only where a page has translations
+    topbar = TOPBAR if cfg.get("languages") else TOPBAR.replace('<label class="langpick">', '<label class="langpick" hidden>')
+    own = cfg.get("languages")  # the litepaper brings its own theme and language script
+    boot = "" if own else BOOT + "\n"
+    toggle = "" if own else "\n" + TOGGLE
     return f"""<!-- chrome:header -->
-<div class="sky">
+{boot}{topbar}<div class="sky">
   <header class="note{compact}" aria-label="Marigold specimen note">
     <div class="micro top" aria-hidden="true">{MICRO}</div>
 
@@ -131,7 +168,7 @@ def header_html(cfg: dict, slot: str = "") -> str:
 
     <div class="micro bottom" aria-hidden="true">{MICRO}</div>
   </header>
-</div>
+</div>{toggle}
 <!-- /chrome:header -->"""
 
 

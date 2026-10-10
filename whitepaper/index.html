@@ -23,7 +23,7 @@
   }
   *{box-sizing:border-box}
   body{
-    margin:0; background:var(--cream); color:var(--ink);
+    margin:0; background:var(--page-bg); color:var(--page-fg);
     font-family:"Fraunces",serif; font-weight:300; line-height:1.65;
   }
   main{max-width:34rem; margin:3rem auto 0; padding:0 1.25rem}
@@ -36,7 +36,7 @@
     font-size:clamp(1.9rem,6vw,2.7rem); font-weight:400; line-height:1.15;
     margin:0 0 1.1rem;
   }
-  p{margin:0 0 1.1rem; color:#33453b}
+  p{margin:0 0 1.1rem; color:var(--text-3)}
   .rule{height:1px; background:var(--moss); opacity:.45; margin:1.6rem 0}
   .btn{
     display:inline-block; font-family:"IBM Plex Mono",monospace;
@@ -51,6 +51,34 @@
   }
 </style>
 <!-- chrome:header -->
+<script>
+  (function () {
+    var t = null; try { t = localStorage.getItem("marigold-theme"); } catch (e) {}
+    if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
+<nav class="topbar">
+  <button class="tgl" id="themeBtn" type="button" aria-pressed="false">
+    <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.2M12 19.4v2.2M4.2 12H2M22 12h-2.2M6.5 6.5 4.9 4.9M19.1 19.1l-1.6-1.6M17.5 6.5l1.6-1.6M4.9 19.1l1.6-1.6"/></svg>
+    <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4 8.4 8.4 0 1 0 20 14.2Z"/></svg>
+    <span class="sr" id="themeLabel">Switch between day and night</span>
+  </button>
+  <div class="grow"></div>
+  <label class="langpick" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+    <span class="sr" id="langLabel">Language</span>
+    <select id="langSel" aria-labelledby="langLabel">
+      <option value="en">English</option>
+      <option value="es">Español</option>
+      <option value="de">Deutsch</option>
+      <option value="fr">Français</option>
+      <option value="it">Italiano</option>
+      <option value="pt">Português</option>
+      <option value="ru">Русский</option>
+      <option value="zh">中文</option>
+    </select>
+  </label>
+</nav>
 <div class="sky">
   <header class="note compact" aria-label="Marigold specimen note">
     <div class="micro top" aria-hidden="true">marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · </div>
@@ -91,6 +119,23 @@
     <div class="micro bottom" aria-hidden="true">marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · </div>
   </header>
 </div>
+<script>
+  (function () {
+    var root = document.documentElement, btn = document.getElementById("themeBtn");
+    var dark = function () {
+      var chosen = root.getAttribute("data-theme");
+      return chosen ? chosen === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    };
+    var apply = function () { btn.setAttribute("aria-pressed", dark() ? "true" : "false"); };
+    apply();
+    btn.addEventListener("click", function () {
+      var next = dark() ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("marigold-theme", next); } catch (e) {}
+      apply();
+    });
+  })();
+</script>
 <!-- /chrome:header -->
 <main>
   <p>The full technical paper: the note pool, the conservation rule, the six

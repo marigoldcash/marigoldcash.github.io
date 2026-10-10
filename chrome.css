@@ -13,7 +13,59 @@
 :root{
   --ink:#141f19; --note:#18291f; --note-edge:#0f1813; --gold:#e4a33d;
   --amber:#c9761f; --petal:#f3cf82; --cream:#efe7d3; --moss:#9aa894;
+  /* the page under the note: day */
+  --page-bg:#efe7d3; --page-fg:#141f19;
+  --text:#3d4a42; --text-2:#4a5c52; --text-3:#2f3d35;
+  --card:#fff; --line:#e5dcc4; --line-2:#d8cfb8; --line-3:#c9bfa4;
+  --hair:rgba(154,168,148,.35); --hair-2:rgba(154,168,148,.45);
+  --code-bg:#e5dcc4; --shadow:rgba(20,31,25,.5); --link-hover:#8a4c12;
 }
+/* night, for a reader who has not chosen; an explicit day choice still wins */
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --page-bg:#0f1813; --page-fg:#e7dfcb;
+    --text:#cfc7b3; --text-2:#b5ad9a; --text-3:#d9d1bd;
+    --card:#18291f; --line:rgba(228,163,61,.22); --line-2:rgba(228,163,61,.3); --line-3:rgba(228,163,61,.35);
+    --hair:rgba(239,231,211,.16); --hair-2:rgba(239,231,211,.22);
+    --code-bg:rgba(228,163,61,.2); --shadow:rgba(0,0,0,.6); --link-hover:#f3cf82;
+  }
+}
+/* night, chosen */
+:root[data-theme="dark"]{
+  --page-bg:#0f1813; --page-fg:#e7dfcb;
+  --text:#cfc7b3; --text-2:#b5ad9a; --text-3:#d9d1bd;
+  --card:#18291f; --line:rgba(228,163,61,.22); --line-2:rgba(228,163,61,.3); --line-3:rgba(228,163,61,.35);
+  --hair:rgba(239,231,211,.16); --hair-2:rgba(239,231,211,.22);
+  --code-bg:rgba(228,163,61,.2); --shadow:rgba(0,0,0,.6); --link-hover:#f3cf82;
+}
+
+/* ---------- the top bar: day and night, and the languages where a page has them ---------- */
+  .topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:.5rem;
+          background:var(--ink);border-bottom:1px solid rgba(228,163,61,.28);
+          padding:.35rem .6rem;min-height:2.9rem}
+  .topbar .grow{flex:1}
+  .tgl{display:inline-flex;align-items:center;justify-content:center;width:2.4rem;height:2.4rem;
+       background:none;border:1px solid rgba(228,163,61,.35);border-radius:6px;color:var(--petal);cursor:pointer}
+  .tgl svg{width:1.1rem;height:1.1rem;display:block;fill:none;stroke:currentColor;stroke-width:1.6;
+           stroke-linecap:round;stroke-linejoin:round}
+  .tgl .moon{display:none}
+  :root[data-theme="dark"] .tgl .moon{display:block}
+  :root[data-theme="dark"] .tgl .sun{display:none}
+  .langpick{display:inline-flex;align-items:center;gap:.4rem;border:1px solid rgba(228,163,61,.35);
+            border-radius:6px;padding:0 .2rem 0 .55rem;height:2.4rem;color:var(--petal)}
+  .langpick svg{width:1rem;height:1rem;flex:none;fill:none;stroke:currentColor;stroke-width:1.5}
+  .langpick select{appearance:none;-webkit-appearance:none;background:none;border:0;color:var(--petal);
+                   font-family:"IBM Plex Mono",monospace;font-size:16px;line-height:1;padding:.4rem 1.5rem .4rem .1rem;
+                   cursor:pointer;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);
+                   background-position:calc(100% - 12px) 52%,calc(100% - 7px) 52%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+  .langpick select option{background:#18291f;color:#efe7d3}
+  .sr{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]) .tgl .moon{display:block}
+    :root:not([data-theme="light"]) .tgl .sun{display:none}
+  }
+.topbar .langpick[hidden]{display:none}
+.tgl:focus-visible,.langpick:focus-within{outline:2px solid var(--gold);outline-offset:2px}
 
 .sky{
   background:var(--ink);
