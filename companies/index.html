@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marigold for companies — prove your records were there</title>
+<meta name="description" content="A lane of your own on the Marigold chain: anchor your records' fingerprints in one transaction a batch, and let anyone verify them years later without asking you, us, or anyone.">
+<meta property="og:title" content="Marigold for companies — prove your records were there">
+<meta property="og:description" content="A lane of your own on the Marigold chain: anchor your records' fingerprints in one transaction a batch, and let anyone verify them years later without asking you, us, or anyone.">
+<meta property="og:url" content="https://marigold.cash/companies/">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/chrome.css">
+<style>
+  :root{
+    --ink:#141f19; --note:#18291f; --note-edge:#0f1813; --gold:#e4a33d;
+    --amber:#c9761f; --petal:#f3cf82; --cream:#efe7d3; --moss:#9aa894;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--cream);color:var(--ink);font-family:"Fraunces",serif;font-weight:300;line-height:1.6}
+  /* ---------- the page under the note ---------- */
+  .page{max-width:62rem;margin:0 auto;padding:0 1.2rem 1rem}
+  .lede{
+    max-width:40em;margin:3rem auto 2.4rem;text-align:center;
+    font-size:clamp(1.15rem,2.4vw,1.4rem);line-height:1.55;color:#2f3d35;
+  }
+  .lede strong{font-weight:500;color:var(--ink)}
+  .kicker{
+    font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--amber);margin:0 0 .5rem;
+  }
+  h2{font-size:clamp(1.5rem,3vw,2rem);font-weight:400;margin:0 0 .9rem;letter-spacing:.01em}
+  section{margin-top:3.4rem;scroll-margin-top:1.5rem}
+  .steps{
+    counter-reset:step;
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:1.1rem;
+  }
+  .step{
+    counter-increment:step;
+    background:#fff;border:1px solid #d8cfb8;border-radius:14px;padding:1.3rem 1.3rem 1.2rem;
+    box-shadow:0 18px 40px -30px rgba(20,31,25,.5);
+    display:flex;flex-direction:column;gap:.6rem;
+  }
+  .step::before{
+    content:counter(step,decimal-leading-zero);
+    font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.2em;color:var(--amber);
+  }
+  .step h3{font-size:1.15rem;font-weight:500;margin:0}
+  .step p{margin:0;color:#3d4a42;font-size:.98rem}
+  .step .cta{margin-top:auto;padding-top:.6rem}
+  .step ol{margin:0;padding-left:1.2rem;color:#3d4a42;font-size:.98rem;display:flex;flex-direction:column;gap:.4rem}
+  .step em{font-style:italic;color:var(--ink)}
+  pre{
+    font-family:"IBM Plex Mono",monospace;font-size:.82rem;line-height:1.55;
+    background:var(--note);color:var(--petal);border-radius:10px;padding:.9rem 1rem;
+    overflow-x:auto;margin:.3rem 0 0;
+  }
+  code{font-family:"IBM Plex Mono",monospace;font-size:.88em;background:#e5dcc4;border-radius:4px;padding:1px 5px}
+  pre code{background:none;padding:0;font-size:1em}
+  a{color:var(--amber)}
+  a:hover{color:#8a4c12}
+  .btn{
+    display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:.76rem;letter-spacing:.12em;
+    text-transform:uppercase;text-decoration:none;color:var(--note);background:var(--gold);
+    border:1px solid var(--amber);border-radius:10px;padding:.7rem 1rem;
+  }
+  .btn:hover{background:#f0b45a;color:var(--note)}
+  .btn.quiet{background:transparent;color:#4a5c52;border-color:#c9bfa4}
+  .btn.quiet:hover{color:var(--ink);border-color:var(--amber)}
+  .row{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center}
+  .dl{display:flex;flex-direction:column;gap:.6rem;margin-top:.2rem}
+  .dl select{
+    font-family:"IBM Plex Mono",monospace;font-size:.8rem;letter-spacing:.04em;color:var(--ink);
+    background:#fff;border:1px solid #c9bfa4;border-radius:10px;padding:.6rem .8rem;width:100%;
+  }
+  .dl .btn{text-align:center}
+  .dl-note{font-size:.82rem;color:#4a5c52;margin:0;min-height:1.2em}
+  .unsigned{border-top:1px solid #e5dcc4;padding-top:.6rem;font-size:.92rem;color:#3d4a42;display:flex;flex-direction:column;gap:.5rem}
+  .unsigned[hidden]{display:none}
+  .unsigned p{margin:0}
+  .unsigned ol{margin:0;padding-left:1.2rem;display:flex;flex-direction:column;gap:.3rem}
+  .unsigned pre{margin:0;font-size:.78rem}
+  .shot{width:100%;height:auto;border:1px solid #e5dcc4;border-radius:8px;background:#fff}
+  details.fine{border-top:1px solid #e5dcc4;padding-top:.5rem;font-size:.9rem;color:#3d4a42}
+  details.fine summary{cursor:pointer;color:var(--ink);font-weight:500}
+  details.fine p{margin:.5rem 0 0}
+  .papers{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1.1rem}
+  .paper{
+    display:block;text-decoration:none;color:inherit;
+    background:var(--note);border:1px solid rgba(228,163,61,.45);border-radius:14px;padding:1.4rem 1.4rem 1.3rem;
+    position:relative;overflow:hidden;
+  }
+  .paper::before{content:"";position:absolute;inset:8px;border:1px solid rgba(228,163,61,.25);border-radius:9px;pointer-events:none}
+  .paper .kicker{color:var(--gold)}
+  .paper h3{color:var(--cream);font-weight:400;font-size:1.3rem;margin:0 0 .4rem}
+  .paper p{color:var(--moss);margin:0;font-size:.95rem}
+  .paper:hover{border-color:var(--gold)}
+  .facts{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:1rem;
+    font-family:"IBM Plex Mono",monospace;font-size:.78rem;letter-spacing:.04em;
+  }
+  .facts div{border-top:2px solid var(--gold);padding-top:.6rem;color:#3d4a42}
+  .facts b{display:block;font-size:1.25rem;font-weight:500;color:var(--ink);letter-spacing:0;font-family:"Fraunces",serif}
+  .note-of-caution{
+    margin-top:3.4rem;border-left:3px solid var(--gold);padding:.2rem 0 .2rem 1.1rem;color:#3d4a42;max-width:44em;
+  }
+  .prose{max-width:44em;color:#3d4a42;display:flex;flex-direction:column;gap:.9rem}
+  .prose strong{font-weight:500;color:var(--ink)}
+  .prose ul{padding-left:1.2rem;display:flex;flex-direction:column;gap:.4rem}
+</style>
+</head>
+<body>
+
+<!-- chrome:header -->
+<div class="sky">
+  <header class="note compact" aria-label="Marigold specimen note">
+    <div class="micro top" aria-hidden="true">marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · </div>
+
+    <span class="corner tl" aria-hidden="true">1</span>
+    <span class="corner tr" aria-hidden="true">10</span>
+    <span class="corner bl" aria-hidden="true">100</span>
+    <span class="corner br" aria-hidden="true">1000</span>
+
+    <div class="face">
+      <img class="rosette" src="/rosette.svg" width="118" height="118" alt="Marigold flower">
+
+      <p class="wordmark"><a href="/">Marigold</a></p>
+
+      <h1 class="title">Prove your records were there</h1>
+
+      <p class="tag">A place on the chain for your company's records, and a way to check them that depends on nobody, us included.</p>
+
+      <div class="divider" aria-hidden="true"></div>
+
+      <p class="status">For companies · anchoring</p>
+
+      <nav class="ways" aria-label="Pages">
+        <a class="take" href="/#start">Take a note</a>
+        <a href="/litepaper/">Litepaper</a>
+        <a href="/whitepaper/">Whitepaper</a>
+        <a href="/faq/">Questions</a>
+        <a aria-current="page" href="/companies/">Companies</a>
+        <a href="/about/">About</a>
+      </nav>
+    </div>
+
+    <div class="serial-row" aria-hidden="true">
+      <span>Nº 000005 — specimen</span>
+      <span>marigold.cash</span>
+    </div>
+
+    <div class="micro bottom" aria-hidden="true">marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · </div>
+  </header>
+</div>
+<!-- /chrome:header -->
+
+<main class="page">
+
+  <section id="anchoring" style="margin-top:2.6rem">
+    <div class="prose" style="margin-bottom:1.8rem">
+    <p>If your business signs contracts, attendance sheets, invoices or reports, you will one day have to prove that a particular record existed on a particular day and has not been altered since. Marigold gives you a place on the chain to make that proof, and a way to check it that depends on nobody, us included.</p>
+    <p>That place is a <strong>lane</strong>: your company's own corner of the chain, a four-letter tag, like a ticker symbol, that every entry you make carries. Anyone looking for your records finds them by that tag, and nobody else can make entries under it. You claim a lane once, with a single transaction from the Marigold wallet — <code>lane claim ACME &lt;your company's key&gt; "Acme Ltd"</code> — for 100 MAGLD paid to the registry. The first valid claim of a tag holds it. The claim is recorded on the chain itself, so there is no form to fill, no account with us, and no one who can take it away; keep the transaction number the wallet gives you, it is your proof of ownership. <em>On the testnet today</em> you can claim a lane right away with test coins from the faucet, to learn the procedure and build your integration; testnet money is worth nothing and the testnet may be reset before launch, so you claim your real lane again at launch, on the main network.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h3>What it does for you</h3>
+        <p>Every digital file has a fingerprint: a short string of letters and numbers (a <em>hash</em>) that a computer works out from the file's contents. Change one character in the file and the fingerprint changes completely. It cannot be turned back into the file, so it gives nothing away.</p>
+        <p>Anchoring a record means putting its fingerprint on the chain, in your lane, in one small transaction. From that moment the chain holds a timestamped statement that a file with exactly that fingerprint existed. To anchor many records at once, a standard technique (a <em>Merkle tree</em>) combines all their fingerprints into one, so a whole month of signed documents costs one transaction. Each customer receives their record, a short <em>inclusion proof</em> that ties it to that combined fingerprint, and the transaction number.</p>
+        <p>That is the whole integration: one transaction per batch, nothing of the records themselves on the chain, and no coins in your customers' hands. The only thing your system needs is a small amount of MAGLD to pay the transaction fees.</p>
+      </div>
+      <div class="step">
+        <h3>What verification takes</h3>
+        <p>Years later, anyone holding a record and its proof can check it without asking you, us, or anyone:</p>
+        <ol>
+          <li>Work out the record's fingerprint again. If it was part of a set of records, you need to walk back the Merkle tree; our software takes care of that.</li>
+          <li>Look up the transaction, by its number or by searching your lane, on an <em>archival node</em>: a copy of the chain that keeps the full history instead of pruning old entries.</li>
+          <li>Check the transaction carries that combined fingerprint, and read the time of the block that holds it. That time is the attestation.</li>
+        </ol>
+        <p>The encoding is published in full, so a developer can write both the anchoring and the checking side in an afternoon, in any language.</p>
+        <div class="cta row"><a class="btn quiet" href="https://github.com/marigoldcash/marigold/blob/main/docs/marigold/LANE-REGISTRY.md">The registry, in full</a><a class="btn quiet" href="https://github.com/marigoldcash/marigold/blob/main/docs/marigold/ANCHORING-GATEWAY.md">The encoding</a></div>
+      </div>
+      <div class="step">
+        <h3>Verification as a service</h3>
+        <p>Checking against an archival node is free, and you may run your own. If you would rather not, marigold.cash runs one and answers verification calls over a simple web interface: is this fingerprint anchored, in which block, at what time.</p>
+        <p>10 MAGLD a month per lane, which keeps the archive running whether or not anyone verifies. 0.01 MAGLD per verification call. Both are drawn from a balance you top up in marigold, and shown on your lane's page.</p>
+        <p><strong>The chain takes nothing.</strong> Every fee paid on the chain goes to the miners who secure it. What the verification service charges is what marigold.cash charges for a service it runs, the way any host charges for hosting, and it pays for the archive and for the people who build the software. Your records, your lane and your proofs never depend on that service: if it vanished tomorrow, every check above still works against any archival node.</p>
+      </div>
+    </div>
+    <p class="note-of-caution" style="margin-top:2rem">The verification service opens with the anchoring gateway. Until then, verify against any archival node, ours included, for nothing.</p>
+  </section>
+
+  <section id="who">
+    <p class="kicker">Who runs this</p>
+    <h2>The archive, the service and the chain are three different things</h2>
+    <div class="prose">
+      <p>The chain is public and belongs to nobody; your lane, your proofs and anyone's ability to verify them live there and depend on no company. The archival node and the verification service are run by marigold.cash Ltd, the company that builds the Marigold software, and they are a convenience, not a dependency. <a href="/about/">Who we are</a> says what the company is and what it does.</p>
+    </div>
+  </section>
+
+</main>
+<!-- chrome:footer -->
+<footer class="site-foot">
+  <ul class="links">
+    <li><a href="/#start">Take a note</a></li>
+    <li><a href="/litepaper/">Litepaper</a></li>
+    <li><a href="/whitepaper/">Whitepaper</a></li>
+    <li><a href="/faq/">Questions</a></li>
+    <li><a href="/companies/">Companies</a></li>
+    <li><a href="/about/">About</a></li>
+  </ul>
+  <ul class="links">
+    <li><a href="https://github.com/marigoldcash">GitHub</a></li>
+    <li><a href="https://t.me/marigoldcash_official">Telegram</a></li>
+    <li><a href="mailto:note@marigold.cash">note@marigold.cash</a></li>
+  </ul>
+  <p class="fine">No token sale. No presale. Nothing to buy yet. If someone offers you Marigold for money before the network launches, they are not us.</p>
+  <p class="fine">marigold.cash Ltd · a company limited by guarantee · incorporation applied for, October 2026 · <a href="/about/#company">more</a></p>
+</footer>
+<!-- /chrome:footer -->
+
+</body>
+</html>

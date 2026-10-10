@@ -15,6 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/chrome.css">
 <style>
   :root{
     --ink:#141f19; --note:#18291f; --note-edge:#0f1813; --gold:#e4a33d;
@@ -24,10 +25,8 @@
   body{
     margin:0; background:var(--cream); color:var(--ink);
     font-family:"Fraunces",serif; font-weight:300; line-height:1.65;
-    display:flex; align-items:center; justify-content:center;
-    min-height:100vh; padding:2rem 1.25rem;
   }
-  main{max-width:34rem; width:100%}
+  main{max-width:34rem; margin:3rem auto 0; padding:0 1.25rem}
   .kicker{
     font-family:"IBM Plex Mono",monospace; font-size:.7rem; font-weight:500;
     letter-spacing:.22em; text-transform:uppercase; color:var(--amber);
@@ -51,9 +50,49 @@
     letter-spacing:.06em; color:var(--moss); margin-top:1.6rem;
   }
 </style>
+<!-- chrome:header -->
+<div class="sky">
+  <header class="note compact" aria-label="Marigold specimen note">
+    <div class="micro top" aria-hidden="true">marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · </div>
+
+    <span class="corner tl" aria-hidden="true">1</span>
+    <span class="corner tr" aria-hidden="true">10</span>
+    <span class="corner bl" aria-hidden="true">100</span>
+    <span class="corner br" aria-hidden="true">1000</span>
+
+    <div class="face">
+      <img class="rosette" src="/rosette.svg" width="118" height="118" alt="Marigold flower">
+
+      <p class="wordmark"><a href="/">Marigold</a></p>
+
+      <h1 class="title">Digital cash with a fully auditable chain</h1>
+
+      <p class="tag">The full technical paper: the note pool, the conservation rule, the six operations, and what an observer can and cannot see.</p>
+
+      <div class="divider" aria-hidden="true"></div>
+
+      <p class="status">Whitepaper · testnet edition</p>
+
+      <nav class="ways" aria-label="Pages">
+        <a class="take" href="/#start">Take a note</a>
+        <a href="/litepaper/">Litepaper</a>
+        <a aria-current="page" href="/whitepaper/">Whitepaper</a>
+        <a href="/faq/">Questions</a>
+        <a href="/companies/">Companies</a>
+        <a href="/about/">About</a>
+      </nav>
+    </div>
+
+    <div class="serial-row" aria-hidden="true">
+      <span>Nº 000003 — specimen</span>
+      <span>marigold.cash</span>
+    </div>
+
+    <div class="micro bottom" aria-hidden="true">marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · </div>
+  </header>
+</div>
+<!-- /chrome:header -->
 <main>
-  <div class="kicker">Marigold · whitepaper</div>
-  <h1>Digital cash with a fully auditable chain</h1>
   <p>The full technical paper: the note pool, the conservation rule, the six
   operations, what an observer can and cannot see, and the launch security
   posture — set out in detail and with its limits stated.</p>
@@ -62,3 +101,22 @@
   <a class="btn" href="marigold-whitepaper.pdf" download>Download the PDF</a>
   <div class="meta">v0.5 · September 2026 · testnet edition · note@marigold.cash</div>
 </main>
+<!-- chrome:footer -->
+<footer class="site-foot">
+  <ul class="links">
+    <li><a href="/#start">Take a note</a></li>
+    <li><a href="/litepaper/">Litepaper</a></li>
+    <li><a href="/whitepaper/">Whitepaper</a></li>
+    <li><a href="/faq/">Questions</a></li>
+    <li><a href="/companies/">Companies</a></li>
+    <li><a href="/about/">About</a></li>
+  </ul>
+  <ul class="links">
+    <li><a href="https://github.com/marigoldcash">GitHub</a></li>
+    <li><a href="https://t.me/marigoldcash_official">Telegram</a></li>
+    <li><a href="mailto:note@marigold.cash">note@marigold.cash</a></li>
+  </ul>
+  <p class="fine">No token sale. No presale. Nothing to buy yet. If someone offers you Marigold for money before the network launches, they are not us.</p>
+  <p class="fine">marigold.cash Ltd · a company limited by guarantee · incorporation applied for, October 2026 · <a href="/about/#company">more</a></p>
+</footer>
+<!-- /chrome:footer -->
