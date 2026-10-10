@@ -76,7 +76,7 @@ PAGES = {
         status='<a href="#start">Public testnet · open</a>',
     ),
     "litepaper/index.html": dict(
-        key="litepaper", serial="000002", compact=True, slot=True, fine=False, inband=True, languages=True,
+        key="litepaper", serial="000002", compact=True, slot=True, inband=True, languages=True,
         status="Litepaper · eight languages",
     ),
     "whitepaper/index.html": dict(
@@ -175,9 +175,8 @@ def header_html(cfg: dict, slot: str = "") -> str:
 FOOTER = """<!-- chrome:footer -->
 <footer class="site-foot{cls}">
   <div class="inner">
-    <ul class="links">
+{lead}    <ul class="links">
       <li><a href="/">Home</a></li>
-      <li><a href="/#start">Take a note</a></li>
       <li><a href="/litepaper/">Litepaper</a></li>
       <li><a href="/whitepaper/">Whitepaper</a></li>
       <li><a href="/faq/">Questions</a></li>
@@ -189,19 +188,24 @@ FOOTER = """<!-- chrome:footer -->
       <li><a href="https://t.me/marigoldcash_official">Telegram</a></li>
       <li><a href="mailto:note@marigold.cash">note@marigold.cash</a></li>
     </ul>
-{fine}  </div>
+  </div>
 </footer>
 <!-- /chrome:footer -->"""
 
-FINE = """    <p class="fine">No token sale. No presale. Nothing to buy yet. If someone offers you Marigold for money before the network launches, they are not us.</p>
-    <p class="fine">marigold.cash Ltd · a company limited by guarantee · incorporation applied for, October 2026 · <a href="/about/#company">more</a></p>
+# The same three lines the litepaper's footer carries in eight languages.
+LEAD = """    <p class="lead">
+      <a href="/">marigold.cash</a> &middot; note@marigold.cash<br>
+      No token sale. No presale. Nothing to buy yet.<br>
+      When there is something real, it will be here.
+    </p>
+    <hr>
 """
 
 
 def footer_html(cfg: dict) -> str:
-    # the litepaper carries its own no-token-sale line in eight languages and
-    # its own green band, so its links sit inside that band without the fine print
-    out = FOOTER.replace("{fine}", FINE if cfg.get("fine", True) else "")
+    # the litepaper has its own translated lead and its own green band, so its
+    # links sit inside that band under a hairline
+    out = FOOTER.replace("{lead}", "" if cfg.get("inband") else LEAD)
     return out.replace("{cls}", " inband" if cfg.get("inband") else "")
 
 

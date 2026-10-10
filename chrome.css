@@ -215,16 +215,19 @@
 /* ---------- the footer: a full-width band in the note's green, the page ends there ---------- */
 .site-foot{
   background:var(--ink); color:var(--moss);
-  margin:4rem 0 0; padding:2.2rem 1.2rem 2.6rem;
+  margin:4rem 0 0; padding:2.6rem 1.2rem 3rem;
   font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.12em;
-  text-transform:uppercase; line-height:2.2;
+  text-transform:uppercase; line-height:2.2; text-align:center;
 }
-.site-foot .inner{max-width:62rem;margin:0 auto;display:flex;flex-direction:column;gap:.6rem}
-.site-foot .links{display:flex;flex-wrap:wrap;gap:.2rem 1.6rem;margin:0;padding:0;list-style:none}
+.site-foot .inner{max-width:62rem;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:.9rem}
+.site-foot .lead{
+  margin:0; font-family:"Fraunces",serif; font-size:.95rem; font-weight:300; letter-spacing:0;
+  text-transform:none; line-height:1.75; color:var(--moss);
+}
+.site-foot .lead a{color:var(--petal);border:0}
+.site-foot hr{width:100%;max-width:62rem;height:1px;border:0;margin:.6rem 0 1rem;background:rgba(228,163,61,.22)}
+.site-foot .links{display:flex;flex-wrap:wrap;justify-content:center;gap:.2rem 1.6rem;margin:0;padding:0;list-style:none}
 .site-foot a{color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(228,163,61,.35);padding-bottom:.1em}
 .site-foot a:hover,.site-foot a:focus-visible{color:var(--petal);border-bottom-color:var(--petal);outline:none}
-.site-foot .fine{margin:.4rem 0 0;color:var(--moss);text-transform:none;letter-spacing:.04em;line-height:1.7;max-width:60em}
-.site-foot .fine a{color:var(--petal)}
-/* inside another page's own green band (the litepaper): just the links, no band of its own */
+/* inside another page's own green band (the litepaper): just the links under a hairline */
 .site-foot.inband{background:none;margin:1.6rem auto 0;padding:1.4rem 0 0;border-top:1px solid rgba(228,163,61,.22);max-width:62rem}
-.site-foot.inband .links{justify-content:center}
