@@ -105,6 +105,18 @@ PAGES = {
     ),
 }
 
+# Pages served from another host carry the same chrome with absolute links.
+# They live in other repositories, so they are stamped on request:
+#   python3 tools/chrome.py --external faucet=/path/to/faucet/src/page.html
+EXTERNAL = {
+    "faucet": dict(
+        key="faucet", serial="000007", compact=True, base="https://marigold.cash",
+        title="The faucet",
+        tag="three real notes an hour, for the testnet",
+        status="Testnet faucet · 11.10 MAGLD a claim",
+    ),
+}
+
 
 def tabs_html(current: str) -> str:
     """The front page's first tab is the gold "Take a note"; every other page
@@ -246,13 +258,22 @@ def css_version() -> str:
     return hashlib.sha256((ROOT / "chrome.css").read_bytes()).hexdigest()[:8]
 
 
+def absolute(html: str, base: str) -> str:
+    """Site-relative links and the flower, made absolute for a page on another host."""
+    html = re.sub(r'href="/(?!/)', f'href="{base}/', html)
+    return html.replace('src="/rosette.svg"', f'src="{base}/rosette.svg"')
+
+
 def stamp(path: Path, cfg: dict) -> str:
     text = path.read_text()
+    base = cfg.get("base", "")
     # the stylesheet link carries a hash of the sheet, so a change to chrome.css
     # is never shown with a browser's cached copy of the old one
-    text = re.sub(r'href="/chrome\.css[^"]*"', f'href="/chrome.css?v={css_version()}"', text, count=1)
+    text = re.sub(r'href="(?:https://marigold\.cash)?/chrome\.css[^"]*"', f'href="{base}/chrome.css?v={css_version()}"', text, count=1)
     slot = litepaper_slot(text) if cfg.get("slot") else ""
     for name, html in (("header", header_html(cfg, slot)), ("footer", footer_html(cfg))):
+        if base:
+            html = absolute(html, base)
         r = region(text, name)
         if r is None:
             sys.exit(f"{path}: chrome:{name} markers are missing")
@@ -262,6 +283,12 @@ def stamp(path: Path, cfg: dict) -> str:
 
 def main() -> int:
     check = "--check" in sys.argv
+    if "--external" in sys.argv:
+        name, _, where = sys.argv[sys.argv.index("--external") + 1].partition("=")
+        path = Path(where)
+        path.write_text(stamp(path, EXTERNAL[name]))
+        print(f"stamped: {path}")
+        return 0
     stale = 0
     for rel, cfg in PAGES.items():
         path = ROOT / rel
