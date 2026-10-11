@@ -185,8 +185,7 @@ FOOTER = """<!-- chrome:footer -->
     </ul>
     <ul class="links">
       <li><a href="https://github.com/marigoldcash">GitHub</a></li>
-      <li><a href="https://marigoldcash.t.me">Telegram</a></li>
-      <li><a href="mailto:note@marigold.cash">note@marigold.cash</a></li>
+      <li><a href="https://marigoldcash.t.me">marigoldcash.t.me</a></li>
     </ul>
   </div>
 </footer>
@@ -209,7 +208,7 @@ FOOTER = """<!-- chrome:footer -->
 
 # The same three lines the litepaper's footer carries in eight languages.
 LEAD = """    <p class="lead">
-      <a href="/">marigold.cash</a> &middot; note@marigold.cash<br>
+      <a href="/">marigold.cash</a> &middot; <a href="https://marigoldcash.t.me">marigoldcash.t.me</a><br>
       No token sale. No presale. Nothing to buy yet.<br>
       When there is something real, it will be here.
     </p>
