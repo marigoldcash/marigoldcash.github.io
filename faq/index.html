@@ -161,44 +161,51 @@
 
   <details id="public-or-local" open>
     <summary>Should I use the public node or run my own?</summary>
-    <p>Your wallet holds your notes. It still has to ask <em>a node</em> what is
-    happening on the network — whether a note is real, whether a payment landed.
-    That node is the only party in the whole system that learns anything about
-    you.</p>
+    <p>Your wallet holds your notes. It still has to follow the network — whether
+    a note is real, whether a payment landed. Since v2.85 it does that in a
+    light way by default: it connects to a public computer for the chain, but
+    keeps its own copy of the pool, the list of every live note, which it takes
+    as of the trustees' latest anchor, checks against the trustees' signatures
+    and the block's commitment, and follows block by block. Which notes are
+    yours it looks up in that copy. The public computer is never asked.</p>
 
     <table>
-      <tr><th></th><th>Public node</th><th>Your own node</th></tr>
-      <tr><td>Ready</td><td>Immediately</td><td>After it catches up with the network</td></tr>
-      <tr><td>Disk</td><td>None</td><td>Several gigabytes, and it grows</td></tr>
-      <tr><td>Who sees your notes</td><td>Whoever runs the node</td><td>Nobody</td></tr>
-      <tr><td>Who sees your address</td><td>Whoever runs the node</td><td>Nobody</td></tr>
+      <tr><th></th><th>Public computer, light wallet</th><th>Your own node</th></tr>
+      <tr><td>Ready</td><td>In seconds</td><td>After it catches up, about an hour on a fast machine</td></tr>
+      <tr><td>Disk</td><td>A few megabytes</td><td>Several gigabytes, and it grows</td></tr>
+      <tr><td>Who sees your notes</td><td>Nobody</td><td>Nobody</td></tr>
+      <tr><td>Who sees your address</td><td>Whoever runs the computer, if you keep a ledger account</td><td>Nobody</td></tr>
+      <tr><td>Mining</td><td>No</td><td>Yes</td></tr>
     </table>
 
-    <p><strong>What a node can see.</strong> The chain records
+    <p><strong>What a public computer can see.</strong> The chain records
     that a note was retired and a new one issued. It never records who did it,
-    or that the two belong to the same person — that is the whole design. But
-    your wallet asks a node about <em>its own</em> notes, and those questions
-    arrive together, from one network address. A rogue node operator can therefore
-    learn which notes are held by the same wallet. It is the one place that
-    linkage exists, and it exists only because you asked someone else.</p>
+    or that the two belong to the same person — that is the whole design. A
+    wallet that asked a computer about <em>its own</em> notes would hand it that
+    linkage, because the questions arrive together from one address; that is
+    why the light wallet asks for the whole pool and looks locally. What the
+    public computer still sees is the transactions you send through it, at the
+    moment you send them, and your ledger address if you keep a ledger account.
+    A public computer too old to serve the light wallet is asked the old way,
+    and the wallet says so.</p>
 
     <p><strong>What a node cannot do.</strong> It cannot spend your notes, see
     your keys, or stop you paying someone. Your money is not at risk either way.
     What is at stake is only whether a stranger can tell your notes apart from
     everyone else's.</p>
 
-    <p><strong>A reasonable rule.</strong> Use the public node while you are
-    trying Marigold out, or for money you would carry in a pocket. Run your own
-    for anything you would rather nobody could correlate. In the wallet:</p>
+    <p><strong>A reasonable rule.</strong> The light wallet is the right choice
+    for almost everyone. Run your own node when you want to mine, keep a ledger
+    account nobody sees, or serve the network. In the wallet:</p>
 
     <p>When a wallet opens without a connection, and when you type
     <code>connect</code>, the wallet asks: <em>1</em>, a public computer while
-    your own copy downloads, for privacy — the recommended choice, and the
-    wallet moves over to your own copy once it has caught up; or <em>2</em>,
-    your own copy only, no public computer at any point. The desktop app asks
-    the same on its open screen. No separate program to install or supervise:
-    the copy of the network runs inside the wallet. You can switch whenever
-    you like; the notes are yours either way.</p>
+    your own copy downloads, for privacy — the light wallet, the recommended
+    choice; or <em>2</em>, your own copy without a public computer — a full
+    node of your own, slow at first, the way to mine. The desktop app asks the
+    same on its open screen. No separate program to install or supervise; the
+    full node, when you want one, runs inside the wallet. You can switch
+    whenever you like; the notes are yours either way.</p>
   </details>
 
   <details id="who-runs-public">
