@@ -1,0 +1,52 @@
+<!doctype html>
+<!--
+  The link-preview image (og.png, 1200×630): the specimen note on the sky,
+  nothing clickable on it. Rendered with
+
+      chromium --headless=new --hide-scrollbars --window-size=1200,630 \
+        --virtual-time-budget=8000 --screenshot=og.png file://$PWD/tools/og.html
+
+  from the repository root, then og.png is committed. Re-render when the note
+  or the tagline changes.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../chrome.css">
+<style>
+  html,body{margin:0;width:1200px;height:630px;overflow:hidden;background:#141f19}
+  .sky{width:1200px;height:630px;padding:0;justify-content:center;box-sizing:border-box}
+  .note{width:1040px;animation:none;opacity:1;transform:none;padding:2.4rem 2.8rem 2rem}
+  .note .rosette{animation:none;width:112px;height:112px}
+  .note .face{gap:1rem;padding:.6rem 0 .4rem}
+  .note .wordmark{font-size:3.3rem}
+  .note .tagline{font-size:1.3rem}
+  .note .status{font-size:.8rem}
+  .note .serial-row{margin-top:1.2rem}
+</style>
+</head>
+<body>
+<div class="sky">
+  <div class="note" aria-hidden="true">
+    <div class="micro top">marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · </div>
+    <span class="corner tl">1</span>
+    <span class="corner tr">10</span>
+    <span class="corner bl">100</span>
+    <span class="corner br">1000</span>
+    <div class="face">
+      <img class="rosette" src="../rosette.svg" width="112" height="112" alt="">
+      <p class="wordmark">Marigold</p>
+      <p class="tagline">Digital cash in fixed notes of <strong>1, 10, 100</strong> and <strong>1,000</strong>.<br>Notes you hold, hand over, and understand.</p>
+      <div class="divider"></div>
+      <p class="status">marigold.cash · public testnet · open</p>
+    </div>
+    <div class="serial-row">
+      <span>Nº 000001 — specimen</span>
+      <span>marigold.cash</span>
+    </div>
+    <div class="micro bottom">marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · marigold · digital cash · </div>
+  </div>
+</div>
+</body>
+</html>
