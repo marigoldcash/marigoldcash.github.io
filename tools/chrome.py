@@ -185,7 +185,7 @@ FOOTER = """<!-- chrome:footer -->
     </ul>
     <ul class="links">
       <li><a href="https://github.com/marigoldcash">GitHub</a></li>
-      <li><a href="https://t.me/marigoldcash_official">Telegram</a></li>
+      <li><a href="https://marigoldcash.t.me">Telegram</a></li>
       <li><a href="mailto:note@marigold.cash">note@marigold.cash</a></li>
     </ul>
   </div>
