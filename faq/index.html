@@ -335,6 +335,19 @@
     wallet you want back; do it once per wallet.</p>
   </details>
 
+  <details id="forgot-password">
+    <summary>I forgot my wallet password. Is my money gone?</summary>
+    <p>No. Your money is sealed with your 24 words; the password only guards
+    the wallet on this computer. Close the wallet and type
+    <code>wallet password reset &lt;name&gt;</code> in the terminal wallet. It
+    asks for the 24 words, checks them against the wallet, asks for a new
+    password, and leaves your notes exactly as they were. The old keys file
+    stays beside the wallet in case the old password comes back to you.</p>
+    <p>To change a password you still know, open the wallet and type
+    <code>wallet password</code>. Backups are never affected either way: they
+    are sealed with the words, not the password.</p>
+  </details>
+
   <details id="backup-covers-every-wallet">
     <summary>Does the backup cover all my wallets, or only the one that is open?</summary>
     <p>All of them, since October 2026. A wallet you put aside and never open
