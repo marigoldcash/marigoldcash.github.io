@@ -190,6 +190,21 @@ FOOTER = """<!-- chrome:footer -->
     </ul>
   </div>
 </footer>
+<a class="to-top" href="#top" id="toTop" aria-label="Back to the top" hidden>
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</a>
+<script>
+  (function () {
+    var b = document.getElementById("toTop"); if (!b) return;
+    var show = function () { b.hidden = (window.scrollY || document.documentElement.scrollTop) < 600; };
+    window.addEventListener("scroll", show, { passive: true }); show();
+    b.addEventListener("click", function (e) {
+      e.preventDefault();
+      var smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.scrollTo({ top: 0, behavior: smooth ? "smooth" : "auto" });
+    });
+  })();
+</script>
 <!-- /chrome:footer -->"""
 
 # The same three lines the litepaper's footer carries in eight languages.
